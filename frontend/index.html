@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avatar Conversacional de Mario Vargas Llosa</title>
+    <meta name="description" content="Conversa con el avatar inteligente de Mario Vargas Llosa. Pregunta sobre literatura, política y filosofía.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/livekit-client/dist/livekit-client.umd.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ===== MODO CHAT ===== -->
+    <div class="app-wrapper" id="chatView">
+        <!-- Panel Izquierdo: Perfil del Avatar -->
+        <aside class="profile-panel">
+            <div class="profile-header">
+                <div class="avatar-ring" id="avatarRingChat">
+                    <img src="mario.png" alt="Mario Vargas Llosa" class="avatar-photo" id="avatarImageChat">
+                </div>
+                <h1 class="profile-name">Mario Vargas Llosa</h1>
+                <div class="profile-badge">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>Avatar Verificado</span>
+                </div>
+                <button class="start-call-btn" id="startCallBtn">
+                    <i class="fa-solid fa-phone"></i>
+                    Iniciar Llamada
+                </button>
+            </div>
+        </aside>
+
+        <!-- Panel Derecho: Chat -->
+        <main class="chat-panel">
+            <div class="chat-header">
+                <div class="chat-header-info">
+                    <span class="online-dot"></span>
+                    <span class="online-label">En línea</span>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message system-msg">
+                    <span>Biblioteca de Don Mario abierta. Escribe o habla para comenzar.</span>
+                </div>
+            </div>
+
+            <div class="suggestion-chips-row">
+                <button class="chip-v" data-prompt="¿Qué opina sobre el auge de los populismos en América Latina?">¿Populismo en A. Latina?</button>
+                <button class="chip-v" data-prompt="¿Cuál es la función del novelista en la sociedad contemporánea?">¿Rol del novelista hoy?</button>
+                <button class="chip-v" data-prompt="¿Por qué dice que la literatura es una mentira que dice la verdad?">La verdad de las mentiras</button>
+                <button class="chip-v" data-prompt="¿Qué consejo le daría a un joven escritor que empieza hoy en día?">Consejo a un escritor</button>
+            </div>
+
+            <div class="chat-input-area">
+                <input type="text" id="textInput" placeholder="Escríbele a Mario Vargas Llosa..." autocomplete="off">
+                <button class="input-mic-btn" id="micBtn" title="Dictar mensaje">
+                    <i class="fa-solid fa-microphone"></i>
+                </button>
+                <button class="input-send-btn" id="sendBtn" title="Enviar">
+                    <i class="fa-solid fa-arrow-up"></i>
+                </button>
+            </div>
+            <p class="disclaimer">Este es un avatar de IA de Mario Vargas Llosa. Verifica la información.</p>
+        </main>
+    </div>
+
+    <!-- ===== MODO LLAMADA ===== -->
+    <div class="call-view hidden" id="callView">
+        <div class="call-identity">
+            <h2 class="call-name">Mario Vargas Llosa</h2>
+            <div class="call-badge">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Avatar Verificado</span>
+            </div>
+        </div>
+
+        <div class="call-avatar-wrapper">
+            <div class="pulse-ring ring-1"></div>
+            <div class="pulse-ring ring-2"></div>
+            <div class="pulse-ring ring-3"></div>
+            <div class="call-avatar-ring" id="callAvatarRing">
+                <img src="mario.gif" alt="Mario Vargas Llosa" class="call-avatar-photo" id="avatarImageCall">
+            </div>
+        </div>
+
+        <div class="call-status" id="callStatus">Conectando...</div>
+
+        <div class="call-controls">
+            <button class="ctrl-btn ctrl-mute" id="muteBtn" title="Silenciar micrófono">
+                <i class="fa-solid fa-microphone"></i>
+            </button>
+            <button class="ctrl-btn ctrl-hangup" id="hangupBtn" title="Colgar">
+                <i class="fa-solid fa-phone-slash"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="asr-status-text" id="asrStatusText"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

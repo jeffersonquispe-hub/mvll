@@ -1,0 +1,19 @@
+# Entornos virtuales de Python
+.venv/
+
+# Cache de Python
+__pycache__/
+*.pyc
+
+# Credenciales (nunca versionar)
+.env
+
+# Cache de audio generado por TTS
+backend/public/cache/*
+!backend/public/cache/.gitkeep
+
+# Editor / SO
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

@@ -1,0 +1,6 @@
+# LiveKit Agents con plugins para Google (STT+LLM), ElevenLabs (TTS), y Silero (VAD)
+livekit-agents[google,elevenlabs,silero]>=1.5
+python-dotenv
+
+# Fallback del LLM: Claude vía AWS Bedrock, usado si Gemini falla (p. ej. cuota agotada)
+livekit-plugins-aws

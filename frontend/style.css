@@ -1,0 +1,631 @@
+/* ============================================================
+   VARIABLES Y RESET GLOBAL
+   ============================================================ */
+:root {
+    --bg: #f5f5f7;
+    --surface: #ffffff;
+    --border: #e5e5ea;
+    --text-primary: #1c1c1e;
+    --text-secondary: #6e6e73;
+    --text-muted: #aeaeb2;
+    --accent-green: #2f5233;
+    --accent-green-light: rgba(47, 82, 51, 0.12);
+    --gold: #c9a84c;
+    --gold-light: rgba(201, 168, 76, 0.15);
+    --burgundy: #8b1a2a;
+    --bubble-user: #e9e9eb;
+    --bubble-bot: #8b1a2a;
+    --call-bg: #ffffff;
+    --danger: #e03131;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+    --shadow-lg: 0 12px 40px rgba(0,0,0,0.14);
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+    height: 100%;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
+.hidden { display: none !important; }
+
+/* ============================================================
+   MODO CHAT — LAYOUT PRINCIPAL
+   ============================================================ */
+.app-wrapper {
+    display: flex;
+    height: 100vh;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px;
+    gap: 20px;
+    align-items: stretch;
+}
+
+/* ---- PANEL IZQUIERDO (Perfil) ---- */
+.profile-panel {
+    width: 300px;
+    flex-shrink: 0;
+    align-self: flex-start;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.profile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 24px;
+    gap: 10px;
+}
+
+/* Avatar del perfil */
+.avatar-ring {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    padding: 3px;
+    background: linear-gradient(135deg, var(--gold), var(--burgundy));
+    box-shadow: 0 4px 20px rgba(139, 26, 42, 0.25);
+    transition: var(--transition);
+}
+
+.avatar-ring.speaking {
+    animation: avatarPulse 1s ease-in-out infinite;
+}
+
+@keyframes avatarPulse {
+    0%, 100% { box-shadow: 0 4px 20px rgba(139, 26, 42, 0.25); }
+    50% { box-shadow: 0 4px 32px rgba(139, 26, 42, 0.6), 0 0 0 6px rgba(139, 26, 42, 0.15); }
+}
+
+.avatar-photo {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+}
+
+.profile-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: center;
+    margin-top: 4px;
+}
+
+.profile-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--accent-green);
+    background: var(--accent-green-light);
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.profile-badge i { font-size: 0.72rem; }
+
+/* Botón Start Call */
+.start-call-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 13px;
+    background: var(--accent-green);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: var(--transition);
+    box-shadow: 0 4px 12px rgba(47, 82, 51, 0.3);
+}
+
+.start-call-btn:hover {
+    background: #264129;
+    box-shadow: 0 6px 20px rgba(47, 82, 51, 0.4);
+    transform: translateY(-1px);
+}
+
+.start-call-btn:active { transform: translateY(0); }
+
+/* Chips de sugerencias — fila horizontal, siempre visible arriba del input */
+.suggestion-chips-row {
+    display: flex;
+    gap: 8px;
+    padding: 12px 24px;
+    border-top: 1px solid var(--border);
+    overflow-x: auto;
+}
+
+.suggestion-chips-row::-webkit-scrollbar { height: 3px; }
+.suggestion-chips-row::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+}
+
+.chip-v {
+    flex-shrink: 0;
+    white-space: nowrap;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 8px 14px;
+    font-size: 0.8rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: 'Inter', sans-serif;
+}
+
+.chip-v:hover {
+    border-color: var(--accent-green);
+    background: var(--accent-green-light);
+    color: var(--accent-green);
+    transform: translateY(-1px);
+}
+
+/* ---- PANEL DERECHO (Chat) ---- */
+.chat-panel {
+    flex: 1;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.chat-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.chat-header-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.online-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #34c759;
+    box-shadow: 0 0 0 2px rgba(52, 199, 89, 0.25);
+    animation: blink 2s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+.online-label {
+    font-size: 0.78rem;
+    color: #34c759;
+    font-weight: 500;
+}
+
+/* Mensajes */
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    scroll-behavior: smooth;
+}
+
+.chat-messages::-webkit-scrollbar { width: 4px; }
+.chat-messages::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+}
+
+/* Burbujas */
+.message {
+    display: flex;
+    max-width: 72%;
+    animation: fadeUp 0.2s ease-out;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.message.user-message { align-self: flex-end; }
+.message.assistant-message { align-self: flex-start; }
+.message.system-msg {
+    align-self: center;
+    max-width: 85%;
+}
+
+.message-bubble {
+    padding: 11px 16px;
+    border-radius: 18px;
+    font-size: 0.88rem;
+    line-height: 1.5;
+}
+
+.user-message .message-bubble {
+    background: var(--bubble-user);
+    color: var(--text-primary);
+    border-bottom-right-radius: 4px;
+}
+
+.assistant-message .message-bubble {
+    background: var(--bubble-bot);
+    color: #fff;
+    border-bottom-left-radius: 4px;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.92rem;
+    line-height: 1.65;
+    border-left: 3px solid var(--gold);
+}
+
+.system-msg {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.system-msg span {
+    background: var(--bg);
+    padding: 6px 14px;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+/* Loading dots */
+.loading-dots { color: rgba(255,255,255,0.8); }
+.loading-dots span {
+    animation: dotBlink 1.2s infinite;
+    display: inline-block;
+}
+.loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes dotBlink {
+    0%, 80%, 100% { opacity: 0.2; }
+    40% { opacity: 1; }
+}
+
+/* Cursor de streaming */
+.stream-cursor {
+    display: inline-block;
+    color: var(--gold);
+    animation: cursorBlink 0.7s step-end infinite;
+}
+
+@keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* ---- ÁREA DE INPUT ---- */
+.chat-input-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+}
+
+.chat-input-area input {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 12px 18px;
+    font-size: 0.88rem;
+    font-family: 'Inter', sans-serif;
+    color: var(--text-primary);
+    outline: none;
+    transition: var(--transition);
+}
+
+.chat-input-area input:focus {
+    border-color: var(--accent-green);
+    box-shadow: 0 0 0 3px rgba(47, 82, 51, 0.1);
+}
+
+.chat-input-area input::placeholder { color: var(--text-muted); }
+
+.input-mic-btn,
+.input-send-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    transition: var(--transition);
+    flex-shrink: 0;
+}
+
+.input-mic-btn {
+    background: var(--bg);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+}
+
+.input-mic-btn:hover { border-color: var(--accent-green); color: var(--accent-green); }
+
+.input-mic-btn.recording {
+    background: var(--danger);
+    color: #fff;
+    border-color: var(--danger);
+    animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+    0%   { transform: scale(1); box-shadow: 0 0 0 0 rgba(224,49,49,0.4); }
+    70%  { transform: scale(1.05); box-shadow: 0 0 0 8px rgba(224,49,49,0); }
+    100% { transform: scale(1); }
+}
+
+.input-send-btn {
+    background: var(--accent-green);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(47,82,51,0.3);
+}
+
+.input-send-btn:hover {
+    background: #264129;
+    transform: scale(1.05);
+}
+
+.disclaimer {
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    padding: 0 20px 12px;
+}
+
+.asr-status-text {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    background: var(--surface);
+    padding: 6px 16px;
+    border-radius: 20px;
+    box-shadow: var(--shadow-sm);
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+    z-index: 999;
+}
+
+.asr-status-text.visible { opacity: 1; }
+
+/* ============================================================
+   MODO LLAMADA
+   ============================================================ */
+.call-view {
+    position: fixed;
+    inset: 0;
+    background: var(--call-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    z-index: 1000;
+    animation: callFadeIn 0.35s ease-out;
+}
+
+@keyframes callFadeIn {
+    from { opacity: 0; transform: scale(1.03); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+/* Nombre e identidad */
+.call-identity {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.call-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.call-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--accent-green);
+    background: var(--accent-green-light);
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+/* Avatar de llamada con anillos */
+.call-avatar-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 240px;
+    height: 240px;
+    margin: 10px 0;
+}
+
+.pulse-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 2px solid var(--accent-green);
+    opacity: 0;
+    animation: ringExpand 2.4s ease-out infinite;
+}
+
+.ring-1 { width: 180px; height: 180px; animation-delay: 0s; }
+.ring-2 { width: 210px; height: 210px; animation-delay: 0.6s; }
+.ring-3 { width: 240px; height: 240px; animation-delay: 1.2s; }
+
+@keyframes ringExpand {
+    0%   { opacity: 0.6; transform: scale(0.85); }
+    100% { opacity: 0;   transform: scale(1); }
+}
+
+/* Anillos activos cuando Don Mario habla */
+.call-avatar-wrapper.speaking .pulse-ring {
+    border-color: var(--burgundy);
+    animation-duration: 1s;
+}
+
+.call-avatar-ring {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    padding: 4px;
+    background: linear-gradient(135deg, #d6e0d4, var(--accent-green));
+    box-shadow: 0 8px 32px rgba(47, 82, 51, 0.25);
+    position: relative;
+    z-index: 2;
+    transition: var(--transition);
+}
+
+.call-avatar-ring.speaking {
+    background: linear-gradient(135deg, var(--gold), var(--burgundy));
+    box-shadow: 0 8px 40px rgba(139, 26, 42, 0.35);
+}
+
+.call-avatar-photo {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Estado de la llamada */
+.call-status {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.3px;
+    min-height: 24px;
+}
+
+/* Controles de llamada */
+.call-controls {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-top: 16px;
+}
+
+.ctrl-btn {
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    transition: var(--transition);
+    box-shadow: var(--shadow-md);
+}
+
+.ctrl-mute {
+    background: #f0f0f5;
+    color: var(--text-primary);
+}
+
+.ctrl-mute:hover { background: #e0e0ea; }
+
+.ctrl-mute.muted {
+    background: #3a3a3c;
+    color: #fff;
+}
+
+.ctrl-hangup {
+    background: var(--danger);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(224, 49, 49, 0.4);
+}
+
+.ctrl-hangup:hover {
+    background: #c12a2a;
+    transform: scale(1.05);
+    box-shadow: 0 6px 24px rgba(224, 49, 49, 0.5);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+    .app-wrapper {
+        flex-direction: column;
+        padding: 0;
+        gap: 0;
+        height: 100dvh;
+    }
+
+    .profile-panel {
+        width: 100%;
+        border-radius: 0;
+        flex-direction: row;
+        height: auto;
+        overflow-x: auto;
+    }
+
+    .profile-header {
+        padding: 16px;
+        border-bottom: none;
+        border-right: 1px solid var(--border);
+        min-width: 220px;
+    }
+
+    .avatar-ring { width: 80px; height: 80px; }
+
+    .suggestion-chips-row { padding: 10px 16px; }
+
+    .chat-panel { border-radius: 0; flex: 1; }
+}
