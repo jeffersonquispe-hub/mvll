@@ -21,6 +21,7 @@ from app.config import settings
 from app.agents import run_response, run_response_stream
 from app.tts import generate_tts
 from app.asr import transcribe_audio, is_google_asr_configured
+from app.feedback_store import is_supabase_configured, save_feedback_supabase
 
 app = FastAPI(title="Mario Vargas Llosa Conversational Avatar API")
 
@@ -295,14 +296,22 @@ async def livekit_token(room: str = Query("mvll-room"), participant: str = Query
 
 @app.post("/api/feedback")
 async def feedback(request: FeedbackRequest):
-    """Guarda el feedback de un usuario (ventana 'Sobre el proyecto') en un JSONL local."""
+    """Guarda el feedback de un usuario (ventana 'Sobre el proyecto') en Supabase
+    (tabla `feedback`, ver supabase/migrations/). Si Supabase no está configurado o
+    la inserción falla, cae a un JSONL local como respaldo — ese archivo es efímero
+    en Render, así que Supabase es la fuente de verdad."""
     message = request.message.strip()
     if not message:
         raise HTTPException(status_code=400, detail="El feedback no puede estar vacío.")
 
-    entry = {"message": message, "timestamp": datetime.now(timezone.utc).isoformat()}
-    with open(settings.FEEDBACK_FILE, "a", encoding="utf-8") as f:
-        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    saved = False
+    if is_supabase_configured():
+        saved = await save_feedback_supabase(message)
+
+    if not saved:
+        entry = {"message": message, "timestamp": datetime.now(timezone.utc).isoformat()}
+        with open(settings.FEEDBACK_FILE, "a", encoding="utf-8") as f:
+            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
     return {"success": True}
 

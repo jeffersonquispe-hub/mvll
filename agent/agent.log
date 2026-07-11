@@ -166,3 +166,164 @@ asyncio.exceptions.CancelledError
 2026-07-11 00:22:37,967 - [33mWARNING[0m livekit - livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 4175 [90m[0m
 2026-07-11 00:22:37,968 - [36mDEBUG[0m livekit.agents - job exiting [90m{"reason": "", "tid": 14424, "job_id": "AJ_haYBPkA8WRkq", "room": "mvll-room-1783747247144-0nu8"}[0m
 2026-07-11 00:22:37,969 - [36mDEBUG[0m livekit.agents - http_session(): closing the httpclient ctx [90m[0m
+2026-07-11 00:26:31,761 - [32mINFO[0m livekit.agents - received job request [90m{"job_id": "AJ_UugTRGRrZBk6", "dispatch_id": "AD_Tbs3y49Rt7ok", "room": "mvll-room-1783747590513-cawn", "room_id": "RM_U7gJTX32nGEz", "agent_name": "mvll_local", "resuming": false, "enable_recording": false}[0m
+2026-07-11 00:26:31,843 - [36mDEBUG[0m livekit.agents - received assignment [90m{"agent_name": "mvll_local", "room_id": "RM_U7gJTX32nGEz", "room": "mvll-room-1783747590513-cawn", "job_id": "AJ_UugTRGRrZBk6", "dispatch_id": "AD_Tbs3y49Rt7ok", "enable_recording": false}[0m
+2026-07-11 00:26:31,843 - [33mWARNING[0m livekit.agents - no warmed process available for job, waiting for one to be created [90m{"job_id": "AJ_UugTRGRrZBk6"}[0m
+2026-07-11 00:26:31,851 - [32mINFO[0m livekit.agents - initializing job runner [90m{"tid": 25784}[0m
+2026-07-11 00:26:31,851 - [36mDEBUG[0m asyncio - Using proactor: IocpProactor [90m[0m
+2026-07-11 00:26:31,852 - [32mINFO[0m livekit.agents - job runner initialized [90m{"tid": 25784, "elapsed_time": 0.0}[0m
+2026-07-11 00:26:32,729 - [32mINFO[0m google_genai._api_client - The user provided project/location will take precedence over the Vertex AI API key from the environment variable. [90m[0m
+2026-07-11 00:26:32,774 - [33mWARNING[0m livekit.agents - RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead [90m[0m
+2026-07-11 00:26:32,781 - [36mDEBUG[0m livekit.agents - input stream attached [90m{"participant": null, "source": "SOURCE_UNKNOWN", "accepted_sources": ["SOURCE_MICROPHONE"]}[0m
+2026-07-11 00:26:32,783 - [32mINFO[0m livekit.agents - adaptive interruption detector initialized [90m{"base_url": "https://agent-gateway.livekit.cloud/v1", "detection_interval": 0.1, "audio_prefix_duration": 1.0, "max_audio_duration": 3, "min_frames": 2, "threshold": null, "inference_timeout": 0.7}[0m
+2026-07-11 00:26:32,788 - [36mDEBUG[0m livekit.agents - http_session(): creating a new httpclient ctx [90m[0m
+2026-07-11 00:26:32,790 - [36mDEBUG[0m grpc._cython.cygrpc - [_cygrpc] Loaded running loop: id(loop)=1828114351680 [90m[0m
+2026-07-11 00:26:32,790 - [36mDEBUG[0m grpc._cython.cygrpc - [_cygrpc] Loaded running loop: id(loop)=1828114351680 [90m[0m
+2026-07-11 00:26:32,792 - [36mDEBUG[0m grpc._cython.cygrpc - [_cygrpc] Loaded running loop: id(loop)=1828114351680 [90m[0m
+2026-07-11 00:26:32,799 - [36mDEBUG[0m livekit.agents - using audio io: `RoomIO` -> `AgentSession` -> `TranscriptSynchronizer` -> `AudioSinkProxy` -> `RoomIO` [90m[0m
+2026-07-11 00:26:32,799 - [36mDEBUG[0m livekit.agents - using transcript io: `AgentSession` -> `TranscriptSynchronizer` -> `RoomIO` [90m[0m
+2026-07-11 00:26:33,301 - [36mDEBUG[0m livekit.agents - audio turn detector initialized [90m{"model": "turn-detector-v1", "thresholds": {"hi": 0.575, "id": 0.47, "ko": 0.695, "de": 0.495, "ar": 0.355, "en": 0.56, "nl": 0.75, "pt": 0.665, "zh": 0.59, "es": 0.59, "fr": 0.575, "it": 0.64, "ja": 0.37, "tr": 0.65}, "default_threshold": 0.56, "overrides": null}[0m
+2026-07-11 00:26:33,309 - [36mDEBUG[0m livekit.agents - adaptive interruption session created [90m{"default_threshold": 0.656, "effective_threshold": 0.656, "user_override": false}[0m
+2026-07-11 00:26:34,813 - [36mDEBUG[0m livekit.agents - start reading stream [90m{"participant": "visitante", "source": "SOURCE_MICROPHONE"}[0m
+2026-07-11 00:26:38,245 - [36mDEBUG[0m livekit.agents - received user transcript [90m{"user_transcript": "Hola, Mario me escuchas?", "language": "es-ES", "transcript_delay": 1.659470796585083}[0m
+2026-07-11 00:26:38,391 - [36mDEBUG[0m livekit.agents - eot prediction [90m{"probability": 0.9493077993392944, "unlikely_threshold": 0.59, "endpointing_delay": 0.3, "language": "es-ES", "trigger": "stt", "from_cache": true}[0m
+2026-07-11 00:26:38,392 - [36mDEBUG[0m livekit.agents - user turn committed [90m{"last_speaking_time": 1783747596.5857787, "last_final_transcript_time": 1783747598.245712, "speech_start_time": 1783747595.5910718, "delay_completed": false, "source": "stt", "end_of_turn_probability": 0.9493077993392944, "unlikely_threshold": 0.59}[0m
+2026-07-11 00:26:38,393 - [36mDEBUG[0m livekit.agents - using preemptive generation [90m{"preemptive_lead_time": 0.14704537391662598}[0m
+2026-07-11 00:26:38,399 - [36mDEBUG[0m livekit.agents - conversation_item_added [90m{"role": "user", "text": "Hola, Mario me escuchas?"}[0m
+2026-07-11 00:26:38,847 - [33mWARNING[0m livekit.agents - livekit.plugins.aws.llm.LLM failed, switching to next LLM: aws bedrock llm: error generating content: An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed [90m[0m
+2026-07-11 00:26:38,848 - [32mINFO[0m google_genai.models - AFC is enabled with max remote calls: 10. [90m[0m
+2026-07-11 00:26:39,229 - [33mWARNING[0m livekit.agents - livekit.plugins.aws.llm.LLM recovery failed: aws bedrock llm: error generating content: An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed [90m[0m
+2026-07-11 00:26:43,966 - [36mDEBUG[0m livekit.agents - aec warmup active, disabling interruptions for 3.00s [90m[0m
+2026-07-11 00:26:46,967 - [36mDEBUG[0m livekit.agents - aec warmup expired, re-enabling interruptions [90m[0m
+2026-07-11 00:26:48,018 - [36mDEBUG[0m livekit.agents - conversation_item_added [90m{"role": "assistant", "text": "Sí, le escucho con perfecta nitidez. Dígame, pues, ¿qué asunto le trae a este diálogo?"}[0m
+2026-07-11 00:26:55,738 - [36mDEBUG[0m livekit.agents - received user transcript [90m{"user_transcript": " Mario me puedes explicar un poco sobre La casa verde?", "language": "es-ES", "transcript_delay": 1.752631425857544}[0m
+2026-07-11 00:26:55,745 - [32mINFO[0m google_genai.models - AFC is enabled with max remote calls: 10. [90m[0m
+2026-07-11 00:26:55,747 - [36mDEBUG[0m livekit.agents - eot prediction [90m{"probability": 0.406807005405426, "unlikely_threshold": 0.59, "endpointing_delay": 2.5, "language": "es-ES", "trigger": "stt", "from_cache": true}[0m
+2026-07-11 00:26:56,135 - [33mWARNING[0m livekit.agents - livekit.plugins.aws.llm.LLM recovery failed: aws bedrock llm: error generating content: An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed [90m[0m
+2026-07-11 00:26:56,498 - [36mDEBUG[0m livekit.agents - user turn committed [90m{"last_speaking_time": 1783747613.9857697, "last_final_transcript_time": 1783747615.7388184, "speech_start_time": 1783747609.4935896, "delay_completed": true, "source": "stt", "end_of_turn_probability": 0.406807005405426, "unlikely_threshold": 0.59}[0m
+2026-07-11 00:26:56,499 - [36mDEBUG[0m livekit.agents - using preemptive generation [90m{"preemptive_lead_time": 0.7601251602172852}[0m
+2026-07-11 00:26:56,502 - [36mDEBUG[0m livekit.agents - conversation_item_added [90m{"role": "user", "text": "Mario me puedes explicar un poco sobre La casa verde?"}[0m
+2026-07-11 00:27:00,193 - [33mWARNING[0m livekit.agents - livekit.plugins.google.llm.LLM failed, switching to next LLM: message='gemini llm: client error', status_code=429, retryable=True, request_id=2bc1a281d05e, body={
+  "error": {
+    "code": 429,
+    "message": "Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.",
+    "status": "RESOURCE_EXHAUSTED"
+  }
+}
+ Too Many Requests [90m[0m
+2026-07-11 00:27:00,194 - [33mWARNING[0m livekit.agents - failed to generate LLM completion: all LLMs failed (['livekit.plugins.aws.llm.LLM', 'livekit.plugins.google.llm.LLM']) after 4.450352430343628 seconds, retrying in 0.1s [90m{"llm": "livekit.agents.llm.fallback_adapter.FallbackAdapter", "attempt": 1}[0m
+2026-07-11 00:27:00,195 - [32mINFO[0m google_genai.models - AFC is enabled with max remote calls: 10. [90m[0m
+2026-07-11 00:27:00,307 - [31mERROR[0m livekit.agents - all LLMs are unavailable, retrying.. [90m[0m
+2026-07-11 00:27:00,703 - [33mWARNING[0m livekit.agents - livekit.plugins.aws.llm.LLM failed, switching to next LLM: aws bedrock llm: error generating content: An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed [90m[0m
+2026-07-11 00:27:00,705 - [32mINFO[0m google_genai.models - AFC is enabled with max remote calls: 10. [90m[0m
+2026-07-11 00:27:01,085 - [33mWARNING[0m livekit.agents - livekit.plugins.aws.llm.LLM recovery failed: aws bedrock llm: error generating content: An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed [90m[0m
+2026-07-11 00:27:04,681 - [32mINFO[0m livekit.agents - llm.FallbackAdapter, livekit.plugins.google.llm.LLM recovered [90m[0m
+2026-07-11 00:27:28,959 - [36mDEBUG[0m livekit.agents - conversation_item_added [90m{"role": "assistant", "text": "Ah, *La Casa Verde*, un verdadero laberinto de ficciones y realidades, un artificio literario que pretendía atrapar la vida en el desierto de Piura y la selva amazónica. Es una novela que desgarra el tiempo y el espacio, donde múltiples historias se entrelazan para crear una realidad más vasta, más intensa, que la propia existencia. Quise que la estructura misma fuera un personaje, un desafío a la linealidad, un reflejo de la complejidad humana y la brutalidad de la naturaleza."}[0m
+2026-07-11 00:28:02,794 - [36mDEBUG[0m livekit.agents - received user transcript [90m{"user_transcript": " Mario me habla sobre tu infancia.", "language": "es-ES", "transcript_delay": 1.4646499156951904}[0m
+2026-07-11 00:28:02,801 - [32mINFO[0m google_genai.models - AFC is enabled with max remote calls: 10. [90m[0m
+2026-07-11 00:28:02,804 - [36mDEBUG[0m livekit.agents - eot prediction [90m{"probability": 0.18122056126594543, "unlikely_threshold": 0.59, "endpointing_delay": 2.5, "language": "es-ES", "trigger": "stt", "from_cache": true}[0m
+2026-07-11 00:28:03,284 - [33mWARNING[0m livekit.agents - livekit.plugins.aws.llm.LLM recovery failed: aws bedrock llm: error generating content: An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed [90m[0m
+2026-07-11 00:28:03,832 - [36mDEBUG[0m livekit.agents - user turn committed [90m{"last_speaking_time": 1783747681.3295286, "last_final_transcript_time": 1783747682.7944858, "speech_start_time": 1783747651.0342891, "delay_completed": true, "source": "stt", "end_of_turn_probability": 0.18122056126594543, "unlikely_threshold": 0.59}[0m
+2026-07-11 00:28:03,833 - [36mDEBUG[0m livekit.agents - using preemptive generation [90m{"preemptive_lead_time": 1.0386533737182617}[0m
+2026-07-11 00:28:03,834 - [36mDEBUG[0m livekit.agents - conversation_item_added [90m{"role": "user", "text": "Mario me habla sobre tu infancia."}[0m
+2026-07-11 00:28:07,814 - [33mWARNING[0m livekit.agents - livekit.plugins.google.llm.LLM failed, switching to next LLM: message='gemini llm: client error', status_code=429, retryable=True, request_id=bae3024dde82, body=Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details. RESOURCE_EXHAUSTED [90m[0m
+2026-07-11 00:28:07,814 - [31mERROR[0m livekit.agents - livekit.plugins.google.llm.LLM failed after sending chunk, skip retrying. Set `retry_on_chunk_sent` to `True` to enable retrying after chunks are sent. [90m{"text_sent": "Mi infancia, ah, fue un período de formación y de rupturas, como casi todas, supongo. Comencé en Arequipa y Cochabamba, en un mundo de mujeres, de fantasía y de protección, para luego chocar brutalmente con la realidad", "tool_calls_sent": []}[0m
+2026-07-11 00:28:07,817 - [33mWARNING[0m livekit.agents - failed to generate LLM completion: message='gemini llm: client error', status_code=429, retryable=True, request_id=bae3024dde82, body=Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details. RESOURCE_EXHAUSTED, retrying in 0.1s [90m{"llm": "livekit.agents.llm.fallback_adapter.FallbackAdapter", "attempt": 1}[0m
+2026-07-11 00:28:07,929 - [31mERROR[0m livekit.agents - all LLMs are unavailable, retrying.. [90m[0m
+2026-07-11 00:28:08,339 - [33mWARNING[0m livekit.agents - livekit.plugins.aws.llm.LLM failed, switching to next LLM: aws bedrock llm: error generating content: An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed [90m[0m
+2026-07-11 00:28:08,340 - [32mINFO[0m google_genai.models - AFC is enabled with max remote calls: 10. [90m[0m
+2026-07-11 00:28:08,733 - [33mWARNING[0m livekit.agents - livekit.plugins.aws.llm.LLM recovery failed: aws bedrock llm: error generating content: An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed [90m[0m
+2026-07-11 00:28:11,423 - [36mDEBUG[0m livekit.agents - flush audio emitter due to slow audio generation [90m[0m
+2026-07-11 00:28:35,929 - [32mINFO[0m livekit.agents - closing agent session due to participant disconnect (disable via `RoomInputOptions.close_on_disconnect=False`) [90m{"room": "mvll-room-1783747590513-cawn", "participant": "visitante", "reason": "CLIENT_INITIATED"}[0m
+2026-07-11 00:28:35,931 - [36mDEBUG[0m livekit.agents - stream closed [90m{"participant": "visitante", "source": "SOURCE_MICROPHONE"}[0m
+2026-07-11 00:28:35,941 - [36mDEBUG[0m livekit.agents - conversation_item_added [90m{"role": "assistant", "text": "Mi infancia, ah, fue un período de formación y de rupturas, como casi todas, supongo. Comencé en Arequipa y Cochabamba, en un mundo de mujeres, de fantasía y de protección, para luego chocar brutalmente con la realidadMi infancia... fue un tiempo de descubrimiento y de ciertas rupturas, un período que, como en casi todo escritor, marcó profundamente mi sensibilidad. La ausencia de mi padre, su reaparición, el paso por el Colegio Militar Leoncio Prado —una experiencia que, como sabe, luego plasmé en *La ciudad y los"}[0m
+2026-07-11 00:28:35,948 - [36mDEBUG[0m livekit.agents - input stream detached [90m{"participant": "visitante", "source": "SOURCE_UNKNOWN", "accepted_sources": ["SOURCE_MICROPHONE"]}[0m
+2026-07-11 00:28:35,952 - [36mDEBUG[0m grpc.aio._call - Client request_iterator raised exception:
+Traceback (most recent call last):
+  File "C:\Users\user\Desktop\MVLL\agent\.venv\Lib\site-packages\grpc\aio\_call.py", line 447, in _consume_request_iterator
+    async for request in request_iterator:
+    ...<10 lines>...
+            return
+  File "C:\Users\user\Desktop\MVLL\agent\.venv\Lib\site-packages\livekit\plugins\google\stt.py", line 766, in input_generator
+    done, _ = await asyncio.wait(
+              ^^^^^^^^^^^^^^^^^^^
+        [frame_task, stop_task], return_when=asyncio.FIRST_COMPLETED
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\tasks.py", line 432, in wait
+    return await _wait(fs, timeout, return_when, loop)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\tasks.py", line 521, in _wait
+    await waiter
+asyncio.exceptions.CancelledError
+ [90m[0m
+2026-07-11 00:28:36,038 - [36mDEBUG[0m livekit.agents - session closed [90m{"reason": "participant_disconnected", "error": null}[0m
+2026-07-11 00:29:00,126 - [33mWARNING[0m livekit - livekit_api::signal_client:608:livekit_api::signal_client - dropping pass-through signal — no stream available [90m[0m
+2026-07-11 00:29:00,129 - [36mDEBUG[0m livekit.agents - shutting down job task [90m{"reason": "", "user_initiated": false}[0m
+2026-07-11 00:29:00,130 - [36mDEBUG[0m livekit.agents - job exiting [90m{"reason": "", "tid": 25784, "job_id": "AJ_UugTRGRrZBk6", "room": "mvll-room-1783747590513-cawn"}[0m
+2026-07-11 00:29:00,131 - [33mWARNING[0m livekit - livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 16791 [90m[0m
+2026-07-11 00:29:00,133 - [36mDEBUG[0m livekit.agents - http_session(): closing the httpclient ctx [90m[0m
+2026-07-11 05:59:57,656 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 0s [90m{"retry_count": 1, "max_retry": 16, "error": "Cannot write to closing transport"}[0m
+2026-07-11 05:59:59,294 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 2s [90m{"retry_count": 2, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-11 06:00:01,303 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 4s [90m{"retry_count": 3, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-11 07:52:55,874 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 6s [90m{"retry_count": 4, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-11 07:53:04,558 - [32mINFO[0m livekit.agents - registered worker [90m{"agent_name": "mvll_local", "deployment": "", "id": "AW_8R7ihRCX7oVv", "url": "wss://mvll-bt1qvyr2.livekit.cloud", "region": "Brazil", "protocol": 17}[0m
+2026-07-11 08:00:48,129 - [32mINFO[0m livekit.agents - received job request [90m{"job_id": "AJ_artRMUFF5ojD", "dispatch_id": "AD_zAx9z3cKxq2w", "room": "mvll-room-1783774846294-nz9i", "room_id": "RM_Nje75Kmt2HPs", "agent_name": "mvll_local", "resuming": false, "enable_recording": false}[0m
+2026-07-11 08:00:48,211 - [36mDEBUG[0m livekit.agents - received assignment [90m{"agent_name": "mvll_local", "room_id": "RM_Nje75Kmt2HPs", "room": "mvll-room-1783774846294-nz9i", "job_id": "AJ_artRMUFF5ojD", "dispatch_id": "AD_zAx9z3cKxq2w", "enable_recording": false}[0m
+2026-07-11 08:00:48,211 - [33mWARNING[0m livekit.agents - no warmed process available for job, waiting for one to be created [90m{"job_id": "AJ_artRMUFF5ojD"}[0m
+2026-07-11 08:00:48,247 - [32mINFO[0m livekit.agents - initializing job runner [90m{"tid": 50076}[0m
+2026-07-11 08:00:48,247 - [36mDEBUG[0m asyncio - Using proactor: IocpProactor [90m[0m
+2026-07-11 08:00:48,248 - [32mINFO[0m livekit.agents - job runner initialized [90m{"tid": 50076, "elapsed_time": 0.0}[0m
+2026-07-11 08:00:49,303 - [32mINFO[0m google_genai._api_client - The user provided project/location will take precedence over the Vertex AI API key from the environment variable. [90m[0m
+2026-07-11 08:00:49,460 - [33mWARNING[0m livekit.agents - RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead [90m[0m
+2026-07-11 08:00:49,496 - [36mDEBUG[0m livekit.agents - input stream attached [90m{"participant": null, "source": "SOURCE_UNKNOWN", "accepted_sources": ["SOURCE_MICROPHONE"]}[0m
+2026-07-11 08:00:49,497 - [32mINFO[0m livekit.agents - adaptive interruption detector initialized [90m{"base_url": "https://agent-gateway.livekit.cloud/v1", "detection_interval": 0.1, "audio_prefix_duration": 1.0, "max_audio_duration": 3, "min_frames": 2, "threshold": null, "inference_timeout": 0.7}[0m
+2026-07-11 08:00:49,502 - [36mDEBUG[0m livekit.agents - http_session(): creating a new httpclient ctx [90m[0m
+2026-07-11 08:00:49,507 - [36mDEBUG[0m grpc._cython.cygrpc - [_cygrpc] Loaded running loop: id(loop)=1828130627984 [90m[0m
+2026-07-11 08:00:49,508 - [36mDEBUG[0m grpc._cython.cygrpc - [_cygrpc] Loaded running loop: id(loop)=1828130627984 [90m[0m
+2026-07-11 08:00:49,511 - [36mDEBUG[0m grpc._cython.cygrpc - [_cygrpc] Loaded running loop: id(loop)=1828130627984 [90m[0m
+2026-07-11 08:00:49,549 - [36mDEBUG[0m livekit.agents - using audio io: `RoomIO` -> `AgentSession` -> `TranscriptSynchronizer` -> `AudioSinkProxy` -> `RoomIO` [90m[0m
+2026-07-11 08:00:49,550 - [36mDEBUG[0m livekit.agents - using transcript io: `AgentSession` -> `TranscriptSynchronizer` -> `RoomIO` [90m[0m
+2026-07-11 08:00:49,558 - [36mDEBUG[0m livekit.agents - start reading stream [90m{"participant": "visitante", "source": "SOURCE_MICROPHONE"}[0m
+2026-07-11 08:00:50,058 - [36mDEBUG[0m livekit.agents - audio turn detector initialized [90m{"model": "turn-detector-v1", "thresholds": {"hi": 0.575, "id": 0.47, "ko": 0.695, "de": 0.495, "ar": 0.355, "en": 0.56, "pt": 0.665, "nl": 0.75, "it": 0.64, "es": 0.59, "fr": 0.575, "zh": 0.59, "ja": 0.37, "tr": 0.65}, "default_threshold": 0.56, "overrides": null}[0m
+2026-07-11 08:00:50,067 - [36mDEBUG[0m livekit.agents - adaptive interruption session created [90m{"default_threshold": 0.656, "effective_threshold": 0.656, "user_override": false}[0m
+2026-07-11 08:00:57,552 - [36mDEBUG[0m livekit.agents - received user transcript [90m{"user_transcript": "hola Mario", "language": "es-ES", "transcript_delay": 1.5158090591430664}[0m
+2026-07-11 08:00:58,257 - [36mDEBUG[0m livekit.agents - eot prediction [90m{"probability": 0.21197658777236938, "unlikely_threshold": 0.59, "endpointing_delay": 2.5, "language": "es-ES", "trigger": "stt", "from_cache": true}[0m
+2026-07-11 08:00:58,539 - [36mDEBUG[0m livekit.agents - user turn committed [90m{"last_speaking_time": 1783774856.0366354, "last_final_transcript_time": 1783774857.5528505, "speech_start_time": 1783774855.448935, "delay_completed": true, "source": "stt", "end_of_turn_probability": 0.21197658777236938, "unlikely_threshold": 0.59}[0m
+2026-07-11 08:00:58,540 - [36mDEBUG[0m livekit.agents - using preemptive generation [90m{"preemptive_lead_time": 0.9868476390838623}[0m
+2026-07-11 08:00:58,541 - [36mDEBUG[0m livekit.agents - conversation_item_added [90m{"role": "user", "text": "hola Mario"}[0m
+2026-07-11 08:00:58,836 - [33mWARNING[0m livekit.agents - livekit.plugins.aws.llm.LLM failed, switching to next LLM: aws bedrock llm: error generating content: An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed [90m[0m
+2026-07-11 08:00:58,840 - [32mINFO[0m google_genai.models - AFC is enabled with max remote calls: 10. [90m[0m
+2026-07-11 08:00:59,323 - [33mWARNING[0m livekit.agents - livekit.plugins.aws.llm.LLM recovery failed: aws bedrock llm: error generating content: An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed [90m[0m
+2026-07-11 08:01:03,241 - [36mDEBUG[0m livekit.agents - aec warmup active, disabling interruptions for 3.00s [90m[0m
+2026-07-11 08:01:06,242 - [36mDEBUG[0m livekit.agents - aec warmup expired, re-enabling interruptions [90m[0m
+2026-07-11 08:01:12,307 - [36mDEBUG[0m livekit.agents - conversation_item_added [90m{"role": "assistant", "text": "Aquí estamos, pues, para desentrañar las complejidades de la existencia, para hurgar en las profundidades que la realidad a menudo oculta."}[0m
+2026-07-11 08:01:26,540 - [32mINFO[0m livekit.agents - closing agent session due to participant disconnect (disable via `RoomInputOptions.close_on_disconnect=False`) [90m{"room": "mvll-room-1783774846294-nz9i", "participant": "visitante", "reason": "CLIENT_INITIATED"}[0m
+2026-07-11 08:01:26,541 - [36mDEBUG[0m livekit.agents - input stream detached [90m{"participant": "visitante", "source": "SOURCE_UNKNOWN", "accepted_sources": ["SOURCE_MICROPHONE"]}[0m
+2026-07-11 08:01:26,547 - [36mDEBUG[0m grpc.aio._call - Client request_iterator raised exception:
+Traceback (most recent call last):
+  File "C:\Users\user\Desktop\MVLL\agent\.venv\Lib\site-packages\grpc\aio\_call.py", line 447, in _consume_request_iterator
+    async for request in request_iterator:
+    ...<10 lines>...
+            return
+  File "C:\Users\user\Desktop\MVLL\agent\.venv\Lib\site-packages\livekit\plugins\google\stt.py", line 766, in input_generator
+    done, _ = await asyncio.wait(
+              ^^^^^^^^^^^^^^^^^^^
+        [frame_task, stop_task], return_when=asyncio.FIRST_COMPLETED
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\tasks.py", line 432, in wait
+    return await _wait(fs, timeout, return_when, loop)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\tasks.py", line 521, in _wait
+    await waiter
+asyncio.exceptions.CancelledError
+ [90m[0m
+2026-07-11 08:01:26,548 - [36mDEBUG[0m livekit.agents - stream closed [90m{"participant": "visitante", "source": "SOURCE_MICROPHONE"}[0m
+2026-07-11 08:01:26,633 - [36mDEBUG[0m livekit.agents - session closed [90m{"reason": "participant_disconnected", "error": null}[0m
+2026-07-11 08:01:47,915 - [36mDEBUG[0m livekit.agents - shutting down job task [90m{"reason": "", "user_initiated": false}[0m
+2026-07-11 08:01:47,916 - [36mDEBUG[0m livekit.agents - job exiting [90m{"reason": "", "tid": 50076, "job_id": "AJ_artRMUFF5ojD", "room": "mvll-room-1783774846294-nz9i"}[0m
+2026-07-11 08:01:47,916 - [33mWARNING[0m livekit - livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 34545 [90m[0m
+2026-07-11 08:01:47,923 - [36mDEBUG[0m livekit.agents - http_session(): closing the httpclient ctx [90m[0m

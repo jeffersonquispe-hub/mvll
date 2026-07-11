@@ -23,6 +23,11 @@ class Settings:
     AWS_DEFAULT_REGION: str = os.getenv("AWS_DEFAULT_REGION", "us-east-1")
     AWS_S3_ASR_BUCKET: str = os.getenv("AWS_S3_ASR_BUCKET", "")
 
+    # Supabase: almacena el feedback de la ventana "Sobre el proyecto" (tabla `feedback`,
+    # ver supabase/migrations/). La service_role key bypassa RLS — solo la usa el backend.
+    SUPABASE_URL: str = os.getenv("SUPABASE_URL", "")
+    SUPABASE_SERVICE_ROLE_KEY: str = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "")
+
     # Directorio para guardar archivos de audio temporales o cacheados
     CACHE_DIR: str = os.path.join(base_dir, "public", "cache")
 
