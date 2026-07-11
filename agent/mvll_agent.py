@@ -23,21 +23,18 @@ from dotenv import load_dotenv
 env_path = Path("C:/Users/user/Desktop/MVLL/.env")
 if env_path.exists():
     load_dotenv(dotenv_path=env_path)
-    # Configurar las variables del sistema para LiveKit, ElevenLabs y Google (usando únicamente la API Key)
+    # Configurar las variables del sistema para LiveKit y ElevenLabs
     eleven_key = os.getenv("ELEVENLABS_API_KEY")
-    gemini_key = os.getenv("GEMINI_API_KEY")
 
-    # IMPORTANTE: Retiramos GOOGLE_APPLICATION_CREDENTIALS del entorno para que el cliente de
-    # Gemini (google.genai) no la recoja vía ADC y devuelva error de Quota Project. Guardamos la
-    # ruta para pasarla explícitamente como credentials_file solo al STT, que sí la necesita.
-    google_stt_credentials_file = os.environ.pop("GOOGLE_APPLICATION_CREDENTIALS", None)
+    # Credenciales de Google: STT y LLM (Vertex AI) usan la misma ADC
+    # (GOOGLE_APPLICATION_CREDENTIALS), a diferencia de antes cuando el LLM usaba
+    # AI Studio con API key y había que retirar la variable del entorno para que
+    # no interfiriera. El STT recibe la ruta explícita igualmente.
+    google_stt_credentials_file = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 
     if eleven_key:
         os.environ["ELEVEN_API_KEY"] = eleven_key
         print(f"[Agent Setup] Configured ElevenLabs API Key")
-    if gemini_key:
-        os.environ["GOOGLE_API_KEY"] = gemini_key
-        print(f"[Agent Setup] Configured Google API Key for STT/LLM")
 
 from livekit.agents import (
     AgentSession,
@@ -115,8 +112,9 @@ async def entrypoint(ctx: JobContext):
             credentials_file=google_stt_credentials_file,
         ),
 
-        # LLM: Claude (AWS Bedrock) primero — Gemini tiene la cuota diaria gratuita
-        # agotada — con Gemini como respaldo si Bedrock llegara a fallar.
+        # LLM: Claude (AWS Bedrock) primero, con Gemini vía Vertex AI (no AI Studio —
+        # facturado a la cuenta de GCP, sin límite diario de cuota gratuita) como
+        # respaldo si Bedrock llegara a fallar.
         llm=FallbackAdapter([
             aws_llm.LLM(
                 model=BEDROCK_FALLBACK_MODEL,
@@ -126,7 +124,9 @@ async def entrypoint(ctx: JobContext):
             ),
             google.LLM(
                 model="gemini-2.5-flash",
-                api_key=os.getenv("GEMINI_API_KEY"),
+                vertexai=True,
+                project=os.getenv("GOOGLE_CLOUD_PROJECT"),
+                location=os.getenv("GOOGLE_CLOUD_REGION", "us-central1"),
                 temperature=0.7,
             ),
         ]),

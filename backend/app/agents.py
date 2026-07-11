@@ -1,4 +1,4 @@
-import google.generativeai as genai
+from google import genai
 from app.config import settings
 from app.bedrock_fallback import is_bedrock_configured, run_bedrock_response, run_bedrock_stream
 
@@ -11,13 +11,23 @@ FALLBACK_RESPONSE = (
     "herejía que llamamos ficción."
 )
 
-def init_gemini(api_key: str = None):
-    """Inicializa la API de Gemini con la clave provista o la de configuración."""
-    key = api_key or settings.GEMINI_API_KEY
-    if key:
-        genai.configure(api_key=key)
-        return True
-    return False
+_vertex_client = None
+
+def is_vertex_configured() -> bool:
+    return bool(settings.GOOGLE_CLOUD_PROJECT and settings.GOOGLE_APPLICATION_CREDENTIALS)
+
+def get_vertex_client():
+    """Cliente de Gemini vía Vertex AI (facturado a la cuenta de GCP, no a los
+    créditos prepago de AI Studio). Usa ADC (GOOGLE_APPLICATION_CREDENTIALS) para
+    autenticarse, igual que el Speech-to-Text."""
+    global _vertex_client
+    if _vertex_client is None:
+        _vertex_client = genai.Client(
+            vertexai=True,
+            project=settings.GOOGLE_CLOUD_PROJECT,
+            location=settings.GOOGLE_CLOUD_REGION,
+        )
+    return _vertex_client
 
 def get_model_name():
     return "gemini-2.5-flash"
@@ -44,11 +54,12 @@ Pregunta del usuario: {prompt}
 Redacta tu respuesta literaria final:
     """
 
-def run_response(prompt: str, api_key: str = None) -> str:
+def run_response(prompt: str) -> str:
     """
     Genera la respuesta final del avatar de Mario Vargas Llosa en una sola llamada al LLM.
-    Intenta Claude vía AWS Bedrock primero (Gemini tiene la cuota diaria gratuita agotada);
-    si no está configurado o falla, cae a Gemini; si eso también falla, usa un texto fijo.
+    Intenta Claude vía AWS Bedrock primero; si no está configurado o falla, cae a Gemini
+    vía Vertex AI (facturado a la cuenta de GCP, no a AI Studio); si eso también falla,
+    usa un texto fijo.
     """
     if is_bedrock_configured():
         try:
@@ -56,25 +67,27 @@ def run_response(prompt: str, api_key: str = None) -> str:
         except Exception as e:
             print(f"Error generando la respuesta del avatar (Bedrock): {e}")
 
-    if init_gemini(api_key):
+    if is_vertex_configured():
         try:
-            model = genai.GenerativeModel(get_model_name())
-            response = model.generate_content(build_fused_prompt(prompt))
+            response = get_vertex_client().models.generate_content(
+                model=get_model_name(),
+                contents=build_fused_prompt(prompt),
+            )
             return response.text.strip()
         except Exception as e:
-            print(f"Error generando la respuesta del avatar (fallback Gemini): {e}")
+            print(f"Error generando la respuesta del avatar (fallback Vertex Gemini): {e}")
 
     return FALLBACK_RESPONSE
 
-def run_response_stream(prompt: str, api_key: str = None):
+def run_response_stream(prompt: str):
     """
     Generador síncrono que produce la respuesta del avatar en fragmentos de texto
     (usado por los endpoints SSE). Pensado para correr dentro de un hilo (ver main.py),
-    ya que tanto boto3 como el SDK de google-generativeai son síncronos.
+    ya que tanto boto3 como el SDK de google-genai son síncronos.
 
-    Intenta Claude vía AWS Bedrock primero (Gemini tiene la cuota diaria gratuita agotada).
-    Si no llega a producir ningún fragmento (no configurado o falla antes del primer chunk),
-    cae por completo a Gemini en vez de mezclar texto de dos proveedores en la misma respuesta.
+    Intenta Claude vía AWS Bedrock primero. Si no llega a producir ningún fragmento (no
+    configurado o falla antes del primer chunk), cae por completo a Gemini vía Vertex AI
+    en vez de mezclar texto de dos proveedores en la misma respuesta.
     """
     if is_bedrock_configured():
         yielded_any = False
@@ -87,17 +100,19 @@ def run_response_stream(prompt: str, api_key: str = None):
         if yielded_any:
             return
 
-    if init_gemini(api_key):
+    if is_vertex_configured():
         yielded_any = False
         try:
-            model = genai.GenerativeModel(get_model_name())
-            response = model.generate_content(build_fused_prompt(prompt), stream=True)
-            for chunk in response:
+            stream = get_vertex_client().models.generate_content_stream(
+                model=get_model_name(),
+                contents=build_fused_prompt(prompt),
+            )
+            for chunk in stream:
                 if chunk.text:
                     yielded_any = True
                     yield chunk.text
         except Exception as e:
-            print(f"Error generando la respuesta del avatar (stream, fallback Gemini): {e}")
+            print(f"Error generando la respuesta del avatar (stream, fallback Vertex Gemini): {e}")
         if yielded_any:
             return
 

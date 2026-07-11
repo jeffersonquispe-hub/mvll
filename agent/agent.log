@@ -1,0 +1,32 @@
+C:\Users\user\Desktop\MVLL\agent\mvll_agent.py:49: DeprecationWarning: livekit-plugins-silero is deprecated and will be removed in v2.0. AgentSession now defaults to the bundled silero VAD, so you can drop the explicit `vad=` argument entirely; pass `vad=None` to opt out, or use `from livekit.agents import inference; inference.VAD(model="silero", ...)` to customise options.
+  from livekit.plugins import google, elevenlabs, silero
+in-process auto-reload has been removed from the Python CLI; use `lk agent dev` for hot-reload
+[Agent Setup] Configured ElevenLabs API Key
+2026-07-11 00:20:04,001 - [36mDEBUG[0m asyncio - Using proactor: IocpProactor [90m[0m
+2026-07-11 00:20:04,002 - [32mINFO[0m livekit.agents - starting worker [90m{"version": "1.6.4", "rtc-version": "1.1.12"}[0m
+2026-07-11 00:20:04,002 - [32mINFO[0m livekit.agents - plugin registered [90m{"plugin": "livekit.plugins.aws", "version": "1.6.4"}[0m
+2026-07-11 00:20:04,002 - [32mINFO[0m livekit.agents - plugin registered [90m{"plugin": "livekit.plugins.google", "version": "1.6.4"}[0m
+2026-07-11 00:20:04,002 - [32mINFO[0m livekit.agents - plugin registered [90m{"plugin": "livekit.plugins.elevenlabs", "version": "1.6.4"}[0m
+2026-07-11 00:20:04,002 - [32mINFO[0m livekit.agents - plugin registered [90m{"plugin": "livekit.plugins.silero", "version": "1.6.4"}[0m
+2026-07-11 00:20:04,014 - [32mINFO[0m livekit.agents - HTTP server listening on :59366 [90m[0m
+2026-07-11 00:20:04,411 - [32mINFO[0m livekit.agents - registered worker [90m{"agent_name": "mvll_local", "deployment": "", "id": "AW_duGoEEkk6V6Y", "url": "wss://mvll-bt1qvyr2.livekit.cloud", "region": "Brazil", "protocol": 17}[0m
+2026-07-11 00:20:04,501 - [32mINFO[0m livekit.agents - received job request [90m{"job_id": "AJ_DByCTjkHRaE9", "dispatch_id": "AD_VwFjJSD9BZsS", "room": "mvll-room-1783746204409-za9y", "room_id": "RM_fj6Bha8qfZha", "agent_name": "mvll_local", "resuming": false, "enable_recording": false}[0m
+2026-07-11 00:20:04,592 - [36mDEBUG[0m livekit.agents - received assignment [90m{"agent_name": "mvll_local", "room_id": "RM_fj6Bha8qfZha", "room": "mvll-room-1783746204409-za9y", "job_id": "AJ_DByCTjkHRaE9", "dispatch_id": "AD_VwFjJSD9BZsS", "enable_recording": false}[0m
+2026-07-11 00:20:04,593 - [33mWARNING[0m livekit.agents - no warmed process available for job, waiting for one to be created [90m{"job_id": "AJ_DByCTjkHRaE9"}[0m
+2026-07-11 00:20:04,602 - [32mINFO[0m livekit.agents - initializing job runner [90m{"tid": 40248}[0m
+2026-07-11 00:20:04,603 - [36mDEBUG[0m asyncio - Using proactor: IocpProactor [90m[0m
+2026-07-11 00:20:04,603 - [32mINFO[0m livekit.agents - job runner initialized [90m{"tid": 40248, "elapsed_time": 0.0}[0m
+2026-07-11 00:20:05,722 - [32mINFO[0m google_genai._api_client - The user provided project/location will take precedence over the Vertex AI API key from the environment variable. [90m[0m
+2026-07-11 00:20:05,826 - [33mWARNING[0m livekit.agents - RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead [90m[0m
+2026-07-11 00:20:05,836 - [36mDEBUG[0m livekit.agents - input stream attached [90m{"participant": null, "source": "SOURCE_UNKNOWN", "accepted_sources": ["SOURCE_MICROPHONE"]}[0m
+2026-07-11 00:20:05,845 - [32mINFO[0m livekit.agents - adaptive interruption detector initialized [90m{"base_url": "https://agent-gateway.livekit.cloud/v1", "detection_interval": 0.1, "audio_prefix_duration": 1.0, "max_audio_duration": 3, "min_frames": 2, "threshold": null, "inference_timeout": 0.7}[0m
+2026-07-11 00:20:05,856 - [36mDEBUG[0m livekit.agents - http_session(): creating a new httpclient ctx [90m[0m
+2026-07-11 00:20:05,869 - [36mDEBUG[0m grpc._cython.cygrpc - [_cygrpc] Loaded running loop: id(loop)=1829523733584 [90m[0m
+2026-07-11 00:20:05,869 - [36mDEBUG[0m grpc._cython.cygrpc - Using AsyncIOEngine.POLLER as I/O engine [90m[0m
+2026-07-11 00:20:05,877 - [36mDEBUG[0m grpc._cython.cygrpc - [_cygrpc] Loaded running loop: id(loop)=1829523733584 [90m[0m
+2026-07-11 00:20:05,890 - [36mDEBUG[0m grpc._cython.cygrpc - [_cygrpc] Loaded running loop: id(loop)=1829523733584 [90m[0m
+2026-07-11 00:20:05,913 - [36mDEBUG[0m livekit.agents - using audio io: `RoomIO` -> `AgentSession` -> `TranscriptSynchronizer` -> `AudioSinkProxy` -> `RoomIO` [90m[0m
+2026-07-11 00:20:05,913 - [36mDEBUG[0m livekit.agents - using transcript io: `AgentSession` -> `TranscriptSynchronizer` -> `RoomIO` [90m[0m
+2026-07-11 00:20:05,919 - [36mDEBUG[0m livekit.agents - start reading stream [90m{"participant": "visitante", "source": "SOURCE_MICROPHONE"}[0m
+2026-07-11 00:20:06,450 - [36mDEBUG[0m livekit.agents - adaptive interruption session created [90m{"default_threshold": 0.656, "effective_threshold": 0.656, "user_override": false}[0m
+2026-07-11 00:20:06,452 - [36mDEBUG[0m livekit.agents - audio turn detector initialized [90m{"model": "turn-detector-v1", "thresholds": {"tr": 0.65, "nl": 0.75, "ko": 0.695, "de": 0.495, "ar": 0.355, "pt": 0.665, "en": 0.56, "id": 0.47, "it": 0.64, "es": 0.59, "fr": 0.575, "ja": 0.37, "zh": 0.59, "hi": 0.575}, "default_threshold": 0.56, "overrides": null}[0m

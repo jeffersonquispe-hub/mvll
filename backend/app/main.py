@@ -39,7 +39,6 @@ SENTENCE_SPLIT = re.compile(r"(?<=[.!?;])\s+")
 # Definición del esquema del Request de Chat
 class ChatRequest(BaseModel):
     message: str
-    gemini_key: str = None
     elevenlabs_key: str = None
     voice_id: str = None
 
@@ -50,7 +49,7 @@ def sse(event: str, data: dict) -> str:
 async def get_config():
     """Retorna el estado de las configuraciones de las APIs."""
     return {
-        "gemini_configured": bool(settings.GEMINI_API_KEY),
+        "gemini_configured": bool(settings.GOOGLE_CLOUD_PROJECT and settings.GOOGLE_APPLICATION_CREDENTIALS),
         "elevenlabs_configured": bool(settings.ELEVENLABS_API_KEY),
         "google_asr_configured": is_google_asr_configured(),
         "default_voice_id": settings.ELEVENLABS_VOICE_ID,
@@ -69,7 +68,7 @@ async def chat(request: ChatRequest):
     start_time = time.time()
 
     t0 = time.time()
-    stylist_output = run_response(request.message, request.gemini_key)
+    stylist_output = run_response(request.message)
     llm_time = int((time.time() - t0) * 1000)
 
     t0 = time.time()
@@ -130,7 +129,7 @@ async def chat_stream(request: ChatRequest):
             yield sse("status", {"text": "escribiendo..."})
 
             full_text = ""
-            async for piece in _consume_stream(run_response_stream(request.message, request.gemini_key)):
+            async for piece in _consume_stream(run_response_stream(request.message)):
                 full_text += piece
                 yield sse("token", {"text": piece})
 
@@ -216,7 +215,7 @@ async def chat_stream_v2(request: ChatRequest):
             full_text = ""
             sentence_buffer = ""
 
-            async for piece in _consume_stream(run_response_stream(request.message, request.gemini_key)):
+            async for piece in _consume_stream(run_response_stream(request.message)):
                 full_text += piece
                 yield sse("token", {"text": piece})
 

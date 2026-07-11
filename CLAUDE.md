@@ -11,14 +11,23 @@ answer, already in Vargas Llosa's literary prose style — and the result is spo
 cloned voice (Voice ID `7B1CbnTtwwTp1CCGjRzn`). All prompts, comments, and UI copy are in Spanish — keep new
 agent/user-facing text in Spanish to match.
 
-**LLM/STT provider order is currently AWS-first, Google-second.** Gemini's free tier has a **20
-requests/day** cap (`GenerateRequestsPerDayPerProjectPerModel-FreeTier`) that gets exhausted quickly during
-normal development, so both the HTTP backend and the voice agent try **Claude via AWS Bedrock first** and
-fall back to Gemini only if Bedrock isn't configured or fails. Same pattern for ASR: Google Cloud
-Speech-to-Text first, AWS Transcribe as fallback (this one Google-first since Transcribe is slower — see TTS
-caching / ASR fallback sections below). If Gemini's daily quota resets and you want it primary again, or if
-Bedrock model access changes, the call order is swapped back easily — see `run_response()`/
-`run_response_stream()` in `agents.py` and the `FallbackAdapter` list in `mvll_agent.py`.
+**LLM/STT provider order is currently AWS-first, Google-second.** Both the HTTP backend and the voice agent
+try **Claude via AWS Bedrock first** and fall back to Gemini only if Bedrock isn't configured or fails. Same
+pattern for ASR: Google Cloud Speech-to-Text first, AWS Transcribe as fallback (this one Google-first since
+Transcribe is slower — see TTS caching / ASR fallback sections below). If Bedrock model access changes, the
+call order is swapped back easily — see `run_response()`/`run_response_stream()` in `agents.py` and the
+`FallbackAdapter` list in `mvll_agent.py`.
+
+**Gemini fallback goes through Vertex AI, not AI Studio.** Both `agents.py` and `mvll_agent.py` used to call
+Gemini via the AI Studio Developer API (`google-generativeai`, an API key in `GEMINI_API_KEY`) — that free
+tier has only a 20 requests/day cap and its own separate prepaid-credit billing, both of which ran out
+repeatedly during development. It was replaced with **Vertex AI** (billed to the GCP project
+`GOOGLE_CLOUD_PROJECT`, not AI Studio credits), authenticated via the same ADC
+(`GOOGLE_APPLICATION_CREDENTIALS`) already used for Speech-to-Text — no API key needed. The backend uses the
+unified `google-genai` SDK (`from google import genai`, `genai.Client(vertexai=True, project=..., location=...)`,
+see `get_vertex_client()` in `agents.py`); the voice agent uses `livekit-plugins-google`'s `google.LLM(...,
+vertexai=True, project=..., location=...)`, which wraps the same SDK. `GEMINI_API_KEY` is no longer read by
+any code in this repo — it's dead in `.env` if still present.
 
 This single-call design replaced an earlier two-stage "Director" (plans the stance/arguments as JSON) +
 "Estilista" (rewrites the plan as prose) pipeline that made two sequential Gemini calls per turn. The
@@ -35,7 +44,7 @@ of truth for the chat pipeline:
 
 - `backend/app/agents.py` — the fused prompt (`build_fused_prompt`), `run_response()` (non-streaming) and
   `run_response_stream()` (generator used by the SSE endpoints). Tries `bedrock_fallback.py` (Claude via AWS
-  Bedrock) first, then Gemini.
+  Bedrock) first, then Gemini via Vertex AI (`get_vertex_client()`, `google-genai` SDK).
 - `backend/app/bedrock_fallback.py` — Claude via AWS Bedrock (`boto3`, not the official `anthropic` SDK — see
   note below). Model is `us.anthropic.claude-sonnet-4-6`; this AWS account doesn't have model access approved
   for Opus 4.8/Sonnet 5/Fable 5 (`AccessDeniedException`) — Sonnet 4.6 and Haiku 4.5 are the only ones that
@@ -63,8 +72,12 @@ first.
 `agent/mvll_agent.py` is the **single canonical LiveKit voice agent** (STT→LLM→TTS over WebRTC, for
 real-time phone-call-style conversation instead of request/response HTTP). It uses the official
 `livekit-agents[google,elevenlabs,silero]` plugins, plus `livekit-plugins-aws` for the Bedrock LLM fallback.
-The `llm=` passed to `AgentSession` is a `livekit.agents.llm.FallbackAdapter([aws_llm.LLM(...), google.LLM(...)])`
-— AWS first, Gemini second, same order/reasoning as the HTTP backend. The MVLL persona is
+The `llm=` passed to `AgentSession` is a `livekit.agents.llm.FallbackAdapter([aws_llm.LLM(...), google.LLM(...,
+vertexai=True, project=..., location=...)])` — AWS first, Gemini via Vertex AI second, same order/reasoning
+as the HTTP backend. Because the LLM now authenticates via ADC (same as STT) instead of an AI Studio API key,
+`GOOGLE_APPLICATION_CREDENTIALS` no longer needs to be popped out of the environment before importing the
+Google plugins (it used to, to stop the AI-Studio-mode client from picking up ADC and erroring on a missing
+quota project). The MVLL persona is
 `MVLL_SYSTEM_PROMPT`, a **separate, hand-written duplicate** of `agents.py`'s `build_fused_prompt()` — the two
 are not shared code (see "Duplicated persona prompt" below). It's a separate always-on process, not spawned
 by the HTTP backend; the backend's only connection to it is minting the join token at `/api/livekit/token`,
@@ -124,15 +137,18 @@ path) and by `backend/app/config.py` (resolved relative to `backend/`, one level
 second, separate `backend/.env` with the same keys duplicated — it was removed since nothing needed two
 copies; don't reintroduce a backend-local `.env`.
 
-Keys used: `GEMINI_API_KEY`, `ELEVENLABS_API_KEY`, `ELEVENLABS_VOICE_ID`, `GOOGLE_APPLICATION_CREDENTIALS` (a
-Google Cloud credentials JSON — used for optional server-side ASR in the HTTP backend, and for
-Speech-to-Text in the voice agent), `LIVEKIT_URL`, `LIVEKIT_API_KEY`, `LIVEKIT_API_SECRET`, `PORT`,
-`GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_REGION`, and for the AWS fallbacks: `AWS_ACCESS_KEY_ID`,
-`AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`, `AWS_S3_ASR_BUCKET`.
+Keys used: `ELEVENLABS_API_KEY`, `ELEVENLABS_VOICE_ID`, `GOOGLE_APPLICATION_CREDENTIALS` (a Google Cloud
+credentials JSON — used for optional server-side ASR in the HTTP backend, for Speech-to-Text in the voice
+agent, and now also for the Gemini-via-Vertex-AI LLM fallback in both), `GOOGLE_CLOUD_PROJECT`,
+`GOOGLE_CLOUD_REGION` (the Vertex AI project/region for the Gemini fallback), `LIVEKIT_URL`,
+`LIVEKIT_API_KEY`, `LIVEKIT_API_SECRET`, `PORT`, and for the AWS fallbacks: `AWS_ACCESS_KEY_ID`,
+`AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`, `AWS_S3_ASR_BUCKET`. `GEMINI_API_KEY` is a leftover from the
+old AI Studio integration — no code reads it anymore, safe to remove from `.env`.
 
-If `GEMINI_API_KEY`/credentials are absent, the backend falls back to a hardcoded Spanish mock response
-instead of failing — this "Mock Mode" lets the full UI/UX be exercised without any API keys. Preserve this
-fallback behavior when touching the LLM call sites.
+If neither Bedrock nor Vertex AI (`GOOGLE_CLOUD_PROJECT`/`GOOGLE_APPLICATION_CREDENTIALS`) are configured or
+both fail, the backend falls back to a hardcoded Spanish mock response instead of failing — this "Mock Mode"
+lets the full UI/UX be exercised without any API keys. Preserve this fallback behavior when touching the LLM
+call sites.
 
 Note: `GOOGLE_APPLICATION_CREDENTIALS` here points to an `authorized_user`-type ADC credential (from
 `gcloud auth application-default login`), not a service account key — it needs a `quota_project_id` field
@@ -162,9 +178,9 @@ shape below.
   tokens from the fused call *and* pipes completed sentences to ElevenLabs' streaming WebSocket API in
   parallel over `websockets`, forwarding raw PCM (24kHz) `audio_chunk` SSE events to the client as they
   arrive, rather than waiting for the whole utterance before synthesizing. The ElevenLabs WebSocket is opened
-  immediately on request start. Because `google-generativeai`'s streaming call is synchronous, it runs in a
-  background thread and is bridged into the async SSE generator via a queue (`_consume_stream` in
-  `main.py`) — keep that bridge if the Gemini SDK call changes.
+  immediately on request start. Because both `boto3` (Bedrock) and `google-genai`'s streaming calls are
+  synchronous, `run_response_stream()` runs in a background thread and is bridged into the async SSE
+  generator via a queue (`_consume_stream` in `main.py`) — keep that bridge if either SDK call changes.
 - `POST /api/asr` — optional server-side Google Cloud STT for audio blobs (multipart `UploadFile`). Not
   called by the current frontend — it prefers the browser's native `webkitSpeechRecognition`.
 - `GET /api/livekit/token?room=&participant=` — mints a LiveKit `AccessToken` (via `livekit-api`) for the
