@@ -10,6 +10,14 @@ const avatarRingChat   = document.getElementById('avatarRingChat');
 const asrStatusText    = document.getElementById('asrStatusText');
 const startCallBtn     = document.getElementById('startCallBtn');
 
+// Ventana "Sobre el proyecto" / Feedback
+const infoBtn           = document.getElementById('infoBtn');
+const infoModal         = document.getElementById('infoModal');
+const infoModalCloseBtn = document.getElementById('infoModalCloseBtn');
+const feedbackTextarea  = document.getElementById('feedbackTextarea');
+const feedbackSubmitBtn = document.getElementById('feedbackSubmitBtn');
+const feedbackStatus    = document.getElementById('feedbackStatus');
+
 // Llamada
 const chatView         = document.getElementById('chatView');
 const callView         = document.getElementById('callView');
@@ -72,6 +80,51 @@ function setupEventListeners() {
 
     // SILENCIAR
     muteBtn.addEventListener('click', toggleMute);
+
+    // VENTANA "SOBRE EL PROYECTO"
+    infoBtn.addEventListener('click', openInfoModal);
+    infoModalCloseBtn.addEventListener('click', closeInfoModal);
+    infoModal.addEventListener('click', e => {
+        if (e.target === infoModal) closeInfoModal();
+    });
+    feedbackSubmitBtn.addEventListener('click', submitFeedback);
+}
+
+// ============================================================
+// VENTANA "SOBRE EL PROYECTO" / FEEDBACK
+// ============================================================
+function openInfoModal() {
+    infoModal.classList.remove('hidden');
+}
+
+function closeInfoModal() {
+    infoModal.classList.add('hidden');
+}
+
+async function submitFeedback() {
+    const message = feedbackTextarea.value.trim();
+    if (!message) return;
+
+    feedbackSubmitBtn.disabled = true;
+    feedbackStatus.textContent = 'Enviando...';
+
+    try {
+        const res = await fetch('/api/feedback', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message })
+        });
+        if (!res.ok) throw new Error(`Error ${res.status}`);
+
+        feedbackTextarea.value = '';
+        feedbackStatus.textContent = '¡Gracias por tu feedback!';
+    } catch (e) {
+        console.error('Error enviando feedback:', e);
+        feedbackStatus.textContent = 'No se pudo enviar. Intenta de nuevo.';
+    } finally {
+        feedbackSubmitBtn.disabled = false;
+        setTimeout(() => { feedbackStatus.textContent = ''; }, 4000);
+    }
 }
 
 // ============================================================

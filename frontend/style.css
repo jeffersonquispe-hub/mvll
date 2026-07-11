@@ -154,6 +154,31 @@ html, body {
 
 .start-call-btn:active { transform: translateY(0); }
 
+/* Botón "Sobre el proyecto" */
+.info-link-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 4px;
+    transition: var(--transition);
+}
+
+.info-link-btn:hover {
+    border-color: var(--gold);
+    color: var(--text-primary);
+    background: var(--gold-light);
+}
+
 /* Chips de sugerencias — fila horizontal, siempre visible arriba del input */
 .suggestion-chips-row {
     display: flex;
@@ -596,6 +621,150 @@ html, body {
     transform: scale(1.05);
     box-shadow: 0 6px 24px rgba(224, 49, 49, 0.5);
 }
+
+/* ============================================================
+   VENTANA MODAL — SOBRE EL PROYECTO / FEEDBACK
+   ============================================================ */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(28, 28, 30, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 2000;
+    animation: callFadeIn 0.2s ease-out;
+}
+
+.modal-card {
+    position: relative;
+    width: 100%;
+    max-width: 460px;
+    max-height: 85vh;
+    overflow-y: auto;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 32px 28px 24px;
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: var(--bg);
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.modal-close-btn:hover { background: var(--border); color: var(--text-primary); }
+
+.modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+}
+
+.modal-subtitle {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--accent-green);
+    margin-top: 22px;
+    margin-bottom: 8px;
+}
+
+.modal-text {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+
+.modal-text-sm { font-size: 0.8rem; margin-bottom: 10px; }
+
+.modal-roadmap {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.modal-roadmap li {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    padding-left: 20px;
+    position: relative;
+    line-height: 1.5;
+}
+
+.modal-roadmap li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+}
+
+.feedback-textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-size: 0.85rem;
+    font-family: 'Inter', sans-serif;
+    color: var(--text-primary);
+    resize: vertical;
+    outline: none;
+    transition: var(--transition);
+}
+
+.feedback-textarea:focus {
+    border-color: var(--accent-green);
+    box-shadow: 0 0 0 3px rgba(47, 82, 51, 0.1);
+}
+
+.feedback-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.feedback-status {
+    font-size: 0.78rem;
+    color: var(--accent-green);
+}
+
+.feedback-submit-btn {
+    flex-shrink: 0;
+    padding: 9px 18px;
+    background: var(--accent-green);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.feedback-submit-btn:hover { background: #264129; }
+.feedback-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
 /* ============================================================
    RESPONSIVE

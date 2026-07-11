@@ -26,7 +26,12 @@ class Settings:
     # Directorio para guardar archivos de audio temporales o cacheados
     CACHE_DIR: str = os.path.join(base_dir, "public", "cache")
 
+    # Archivo donde se acumula el feedback enviado desde la ventana "Sobre el proyecto"
+    # (fuera de public/, no se sirve estáticamente)
+    FEEDBACK_FILE: str = os.path.join(base_dir, "data", "feedback.jsonl")
+
 settings = Settings()
 
 # Asegurar que el directorio de caché existe
 os.makedirs(settings.CACHE_DIR, exist_ok=True)
+os.makedirs(os.path.dirname(settings.FEEDBACK_FILE), exist_ok=True)

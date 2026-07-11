@@ -5,6 +5,7 @@ import asyncio
 import threading
 import queue as sync_queue
 import re
+from datetime import datetime, timezone
 
 import websockets
 from fastapi import FastAPI, UploadFile, File, HTTPException, Query
@@ -41,6 +42,9 @@ class ChatRequest(BaseModel):
     message: str
     elevenlabs_key: str = None
     voice_id: str = None
+
+class FeedbackRequest(BaseModel):
+    message: str
 
 def sse(event: str, data: dict) -> str:
     return f"event: {event}\ndata: {json.dumps(data, ensure_ascii=False)}\n\n"
@@ -288,6 +292,19 @@ async def livekit_token(room: str = Query("mvll-room"), participant: str = Query
         ))
     )
     return {"token": token.to_jwt()}
+
+@app.post("/api/feedback")
+async def feedback(request: FeedbackRequest):
+    """Guarda el feedback de un usuario (ventana 'Sobre el proyecto') en un JSONL local."""
+    message = request.message.strip()
+    if not message:
+        raise HTTPException(status_code=400, detail="El feedback no puede estar vacío.")
+
+    entry = {"message": message, "timestamp": datetime.now(timezone.utc).isoformat()}
+    with open(settings.FEEDBACK_FILE, "a", encoding="utf-8") as f:
+        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+
+    return {"success": True}
 
 @app.post("/api/asr")
 async def asr(file: UploadFile = File(...)):

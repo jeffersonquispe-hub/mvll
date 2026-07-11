@@ -31,6 +31,10 @@
                     <i class="fa-solid fa-phone"></i>
                     Iniciar Llamada
                 </button>
+                <button class="info-link-btn" id="infoBtn">
+                    <i class="fa-solid fa-circle-info"></i>
+                    Sobre el proyecto
+                </button>
             </div>
         </aside>
 
@@ -101,6 +105,40 @@
     </div>
 
     <div class="asr-status-text" id="asrStatusText"></div>
+
+    <!-- ===== VENTANA: SOBRE EL PROYECTO ===== -->
+    <div class="modal-overlay hidden" id="infoModal">
+        <div class="modal-card">
+            <button class="modal-close-btn" id="infoModalCloseBtn" title="Cerrar">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <h2 class="modal-title">Sobre este proyecto</h2>
+            <p class="modal-text">
+                Este es un MVP de un avatar conversacional de Mario Vargas Llosa, desarrollado por el equipo de
+                investigación de la Cámara Peruana de Inteligencia Artificial. Cada respuesta se genera con un
+                modelo de lenguaje instruido para razonar con su postura intelectual y responder en su estilo
+                literario característico, y luego se sintetiza con una voz clonada. Puedes escribirle por chat o
+                iniciar una llamada de voz en tiempo real.
+            </p>
+
+            <h3 class="modal-subtitle">Qué se viene</h3>
+            <ul class="modal-roadmap">
+                <li>Memoria de conversación, para que Don Mario recuerde el hilo de la charla</li>
+                <li>Más referencias literarias verificadas y citas de su obra</li>
+                <li>Soporte para más idiomas</li>
+                <li>Mejoras de latencia en la llamada de voz en tiempo real</li>
+            </ul>
+
+            <h3 class="modal-subtitle">Danos tu feedback</h3>
+            <p class="modal-text modal-text-sm">¿Qué te pareció? ¿Qué te gustaría ver? Tu opinión nos ayuda a mejorar.</p>
+            <textarea class="feedback-textarea" id="feedbackTextarea" placeholder="Escribe aquí tu feedback..." rows="4"></textarea>
+            <div class="feedback-actions">
+                <span class="feedback-status" id="feedbackStatus"></span>
+                <button class="feedback-submit-btn" id="feedbackSubmitBtn">Enviar feedback</button>
+            </div>
+        </div>
+    </div>
 
     <script src="app.js"></script>
 </body>
