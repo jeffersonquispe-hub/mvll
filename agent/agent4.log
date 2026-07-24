@@ -1,0 +1,209 @@
+C:\Users\user\Desktop\MVLL\agent\mvll_agent.py:52: DeprecationWarning: livekit-plugins-silero is deprecated and will be removed in v2.0. AgentSession now defaults to the bundled silero VAD, so you can drop the explicit `vad=` argument entirely; pass `vad=None` to opt out, or use `from livekit.agents import inference; inference.VAD(model="silero", ...)` to customise options.
+  from livekit.plugins import google, elevenlabs, silero
+in-process auto-reload has been removed from the Python CLI; use `lk agent dev` for hot-reload
+[Agent Setup] Configured ElevenLabs API Key
+2026-07-11 11:56:47,879 - [36mDEBUG[0m asyncio - Using proactor: IocpProactor [90m[0m
+2026-07-11 11:56:47,883 - [32mINFO[0m livekit.agents - starting worker [90m{"version": "1.6.4", "rtc-version": "1.1.12"}[0m
+2026-07-11 11:56:47,889 - [32mINFO[0m livekit.agents - plugin registered [90m{"plugin": "livekit.plugins.aws", "version": "1.6.4"}[0m
+2026-07-11 11:56:47,889 - [32mINFO[0m livekit.agents - plugin registered [90m{"plugin": "livekit.plugins.google", "version": "1.6.4"}[0m
+2026-07-11 11:56:47,889 - [32mINFO[0m livekit.agents - plugin registered [90m{"plugin": "livekit.plugins.elevenlabs", "version": "1.6.4"}[0m
+2026-07-11 11:56:47,890 - [32mINFO[0m livekit.agents - plugin registered [90m{"plugin": "livekit.plugins.silero", "version": "1.6.4"}[0m
+2026-07-11 11:56:47,903 - [32mINFO[0m livekit.agents - HTTP server listening on :59023 [90m[0m
+2026-07-11 11:56:48,625 - [32mINFO[0m livekit.agents - registered worker [90m{"agent_name": "mvll_local", "deployment": "", "id": "AW_AWP6dGzvVqL5", "url": "wss://mvll-bt1qvyr2.livekit.cloud", "region": "Brazil", "protocol": 17}[0m
+2026-07-11 12:00:58,713 - [32mINFO[0m livekit.agents - received job request [90m{"job_id": "AJ_MZEeVFDMgNVL", "dispatch_id": "AD_NzFg2xTnWZF7", "room": "mvll-room-1783789257609-1bpr", "room_id": "RM_FvCaefUdCpTc", "agent_name": "mvll_local", "resuming": false, "enable_recording": false}[0m
+2026-07-11 12:00:58,803 - [36mDEBUG[0m livekit.agents - received assignment [90m{"agent_name": "mvll_local", "room_id": "RM_FvCaefUdCpTc", "room": "mvll-room-1783789257609-1bpr", "job_id": "AJ_MZEeVFDMgNVL", "dispatch_id": "AD_NzFg2xTnWZF7", "enable_recording": false}[0m
+2026-07-11 12:00:58,803 - [33mWARNING[0m livekit.agents - no warmed process available for job, waiting for one to be created [90m{"job_id": "AJ_MZEeVFDMgNVL"}[0m
+2026-07-11 12:00:58,858 - [32mINFO[0m livekit.agents - initializing job runner [90m{"tid": 32016}[0m
+2026-07-11 12:00:58,859 - [36mDEBUG[0m asyncio - Using proactor: IocpProactor [90m[0m
+2026-07-11 12:00:58,863 - [32mINFO[0m livekit.agents - job runner initialized [90m{"tid": 32016, "elapsed_time": 0.0}[0m
+2026-07-11 12:01:00,511 - [32mINFO[0m google_genai._api_client - The user provided project/location will take precedence over the Vertex AI API key from the environment variable. [90m[0m
+2026-07-11 12:01:00,718 - [33mWARNING[0m livekit.agents - RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead [90m[0m
+2026-07-11 12:01:00,745 - [36mDEBUG[0m livekit.agents - input stream attached [90m{"participant": null, "source": "SOURCE_UNKNOWN", "accepted_sources": ["SOURCE_MICROPHONE"]}[0m
+2026-07-11 12:01:00,755 - [32mINFO[0m livekit.agents - adaptive interruption detector initialized [90m{"base_url": "https://agent-gateway.livekit.cloud/v1", "detection_interval": 0.1, "audio_prefix_duration": 1.0, "max_audio_duration": 3, "min_frames": 2, "threshold": null, "inference_timeout": 0.7}[0m
+2026-07-11 12:01:00,771 - [36mDEBUG[0m livekit.agents - http_session(): creating a new httpclient ctx [90m[0m
+2026-07-11 12:01:00,788 - [36mDEBUG[0m grpc._cython.cygrpc - [_cygrpc] Loaded running loop: id(loop)=1746512232848 [90m[0m
+2026-07-11 12:01:00,788 - [36mDEBUG[0m grpc._cython.cygrpc - Using AsyncIOEngine.POLLER as I/O engine [90m[0m
+2026-07-11 12:01:00,808 - [36mDEBUG[0m grpc._cython.cygrpc - [_cygrpc] Loaded running loop: id(loop)=1746512232848 [90m[0m
+2026-07-11 12:01:00,842 - [36mDEBUG[0m grpc._cython.cygrpc - [_cygrpc] Loaded running loop: id(loop)=1746512232848 [90m[0m
+2026-07-11 12:01:00,931 - [36mDEBUG[0m livekit.agents - using audio io: `RoomIO` -> `AgentSession` -> `TranscriptSynchronizer` -> `AudioSinkProxy` -> `RoomIO` [90m[0m
+2026-07-11 12:01:00,932 - [36mDEBUG[0m livekit.agents - using transcript io: `AgentSession` -> `TranscriptSynchronizer` -> `RoomIO` [90m[0m
+2026-07-11 12:01:00,942 - [36mDEBUG[0m livekit.agents - start reading stream [90m{"participant": "visitante", "source": "SOURCE_MICROPHONE"}[0m
+2026-07-11 12:01:01,423 - [36mDEBUG[0m livekit.agents - audio turn detector initialized [90m{"model": "turn-detector-v1", "thresholds": {"hi": 0.575, "id": 0.47, "ko": 0.695, "de": 0.495, "ar": 0.355, "en": 0.56, "pt": 0.665, "nl": 0.75, "it": 0.64, "es": 0.59, "fr": 0.575, "ja": 0.37, "zh": 0.59, "tr": 0.65}, "default_threshold": 0.56, "overrides": null}[0m
+2026-07-11 12:01:01,430 - [36mDEBUG[0m livekit.agents - adaptive interruption session created [90m{"default_threshold": 0.656, "effective_threshold": 0.656, "user_override": false}[0m
+2026-07-11 12:01:09,568 - [36mDEBUG[0m livekit.agents - received user transcript [90m{"user_transcript": "me escuchas Mario", "language": "es-ES", "transcript_delay": 1.5467357635498047}[0m
+2026-07-11 12:01:09,580 - [36mDEBUG[0m livekit.agents - eot prediction [90m{"probability": 0.9140336513519287, "unlikely_threshold": 0.59, "endpointing_delay": 0.3, "language": "es-ES", "trigger": "stt", "from_cache": true}[0m
+2026-07-11 12:01:09,582 - [36mDEBUG[0m livekit.agents - user turn committed [90m{"last_speaking_time": 1783789268.0214288, "last_final_transcript_time": 1783789269.5685036, "speech_start_time": 1783789266.8776991, "delay_completed": false, "source": "stt", "end_of_turn_probability": 0.9140336513519287, "unlikely_threshold": 0.59}[0m
+2026-07-11 12:01:09,586 - [32mINFO[0m google_genai.models - AFC is enabled with max remote calls: 10. [90m[0m
+2026-07-11 12:01:09,591 - [36mDEBUG[0m livekit.agents - using preemptive generation [90m{"preemptive_lead_time": 0.021936893463134766}[0m
+2026-07-11 12:01:09,608 - [36mDEBUG[0m livekit.agents - conversation_item_added [90m{"role": "user", "text": "me escuchas Mario"}[0m
+2026-07-11 12:01:12,905 - [36mDEBUG[0m livekit.agents - aec warmup active, disabling interruptions for 3.00s [90m[0m
+2026-07-11 12:01:15,905 - [36mDEBUG[0m livekit.agents - aec warmup expired, re-enabling interruptions [90m[0m
+2026-07-11 12:01:19,046 - [36mDEBUG[0m livekit.agents - conversation_item_added [90m{"role": "assistant", "text": "Sí, le escucho con perfecta claridad. Dígame, ¿qué desvarío intelectual o qué inquietud literaria le trae por aquí?"}[0m
+2026-07-11 12:01:26,818 - [36mDEBUG[0m livekit.agents - received user transcript [90m{"user_transcript": " puedes sacar quisiera saber más sobre tus obras, cuál es tu obra favorita?", "language": "es-ES", "transcript_delay": 1.4524149894714355}[0m
+2026-07-11 12:01:26,824 - [36mDEBUG[0m livekit.agents - eot prediction [90m{"probability": 0.9363456964492798, "unlikely_threshold": 0.59, "endpointing_delay": 0.3, "language": "es-ES", "trigger": "stt", "from_cache": true}[0m
+2026-07-11 12:01:26,825 - [36mDEBUG[0m livekit.agents - user turn committed [90m{"last_speaking_time": 1783789285.3661504, "last_final_transcript_time": 1783789286.8188908, "speech_start_time": 1783789280.8791344, "delay_completed": false, "source": "stt", "end_of_turn_probability": 0.9363456964492798, "unlikely_threshold": 0.59}[0m
+2026-07-11 12:01:26,831 - [32mINFO[0m google_genai.models - AFC is enabled with max remote calls: 10. [90m[0m
+2026-07-11 12:01:26,853 - [36mDEBUG[0m livekit.agents - using preemptive generation [90m{"preemptive_lead_time": 0.03368234634399414}[0m
+2026-07-11 12:01:26,865 - [36mDEBUG[0m livekit.agents - conversation_item_added [90m{"role": "user", "text": "puedes sacar quisiera saber más sobre tus obras, cuál es tu obra favorita?"}[0m
+2026-07-11 12:01:55,374 - [36mDEBUG[0m livekit.agents - received user transcript [90m{"user_transcript": " Si me escuchas.", "language": "es-ES", "transcript_delay": 1.6538643836975098}[0m
+2026-07-11 12:01:55,385 - [36mDEBUG[0m livekit.agents - eot prediction [90m{"probability": 0.7017492055892944, "unlikely_threshold": 0.59, "endpointing_delay": 0.3, "language": "es-ES", "trigger": "stt", "from_cache": true}[0m
+2026-07-11 12:01:55,386 - [36mDEBUG[0m livekit.agents - user turn committed [90m{"last_speaking_time": 1783789313.7201571, "last_final_transcript_time": 1783789315.3747442, "speech_start_time": 1783789313.080768, "delay_completed": false, "source": "stt", "end_of_turn_probability": 0.7017492055892944, "unlikely_threshold": 0.59}[0m
+2026-07-11 12:01:55,388 - [32mINFO[0m google_genai.models - AFC is enabled with max remote calls: 10. [90m[0m
+2026-07-11 12:01:55,394 - [36mDEBUG[0m livekit.agents - using preemptive generation [90m{"preemptive_lead_time": 0.015779972076416016}[0m
+2026-07-11 12:01:55,406 - [36mDEBUG[0m livekit.agents - conversation_item_added [90m{"role": "user", "text": "Si me escuchas."}[0m
+2026-07-11 12:02:16,070 - [36mDEBUG[0m livekit.agents - received user transcript [90m{"user_transcript": " Hola, me escuchas?", "language": "es-ES", "transcript_delay": 1.6551883220672607}[0m
+2026-07-11 12:02:16,081 - [36mDEBUG[0m livekit.agents - eot prediction [90m{"probability": 0.30117011070251465, "unlikely_threshold": 0.59, "endpointing_delay": 2.5, "language": "es-ES", "trigger": "stt", "from_cache": true}[0m
+2026-07-11 12:02:16,083 - [32mINFO[0m google_genai.models - AFC is enabled with max remote calls: 10. [90m[0m
+2026-07-11 12:02:16,916 - [36mDEBUG[0m livekit.agents - user turn committed [90m{"last_speaking_time": 1783789334.4157455, "last_final_transcript_time": 1783789336.0712044, "speech_start_time": 1783789333.7297707, "delay_completed": true, "source": "stt", "end_of_turn_probability": 0.30117011070251465, "unlikely_threshold": 0.59}[0m
+2026-07-11 12:02:16,917 - [36mDEBUG[0m livekit.agents - using preemptive generation [90m{"preemptive_lead_time": 0.8461496829986572}[0m
+2026-07-11 12:02:16,919 - [36mDEBUG[0m livekit.agents - conversation_item_added [90m{"role": "user", "text": "Hola, me escuchas?"}[0m
+2026-07-11 12:02:51,494 - [36mDEBUG[0m livekit.agents - conversation_item_added [90m{"role": "assistant", "text": "Es una pregunta que se me ha formulado innumerables veces, y la respuesta es siempre la misma: un escritor no tiene una obra favorita, no en el sentido que un lector podría tenerla. Cada novela es un fragmento de su propia vida, una batalla librada contra la realidad, un intento de domeñar los demonios que lo asaltan.\n\nDiría que todas son igualmente mías, igualmente nacidas de una disciplina implacable y una obsesión particular. Es como preguntar a un padre cuál de sus hijos prefiere; cada uno representa un desafío, una conquista, una parte ineludible de mi existencia."}[0m
+2026-07-11 12:02:57,672 - [32mINFO[0m livekit.agents - closing agent session due to participant disconnect (disable via `RoomInputOptions.close_on_disconnect=False`) [90m{"room": "mvll-room-1783789257609-1bpr", "participant": "visitante", "reason": "CLIENT_INITIATED"}[0m
+2026-07-11 12:02:57,673 - [36mDEBUG[0m livekit.agents - input stream detached [90m{"participant": "visitante", "source": "SOURCE_UNKNOWN", "accepted_sources": ["SOURCE_MICROPHONE"]}[0m
+2026-07-11 12:02:57,682 - [36mDEBUG[0m grpc.aio._call - Client request_iterator raised exception:
+Traceback (most recent call last):
+  File "C:\Users\user\Desktop\MVLL\agent\.venv\Lib\site-packages\grpc\aio\_call.py", line 449, in _consume_request_iterator
+    await self._write(request)
+  File "C:\Users\user\Desktop\MVLL\agent\.venv\Lib\site-packages\grpc\aio\_call.py", line 498, in _write
+    await self._cython_call.send_serialized_message(serialized_request)
+  File "src/python/grpcio/grpc/_cython/_cygrpc/aio/call.pyx.pxi", line 403, in send_serialized_message
+  File "src/python/grpcio/grpc/_cython/_cygrpc/aio/callback_common.pyx.pxi", line 148, in _send_message
+  File "src/python/grpcio/grpc/_cython/_cygrpc/aio/callback_common.pyx.pxi", line 99, in execute_batch
+asyncio.exceptions.CancelledError
+ [90m[0m
+2026-07-11 12:02:57,684 - [36mDEBUG[0m livekit.agents - stream closed [90m{"participant": "visitante", "source": "SOURCE_MICROPHONE"}[0m
+2026-07-11 12:02:57,815 - [36mDEBUG[0m livekit.agents - session closed [90m{"reason": "participant_disconnected", "error": null}[0m
+2026-07-11 12:03:20,442 - [36mDEBUG[0m livekit.agents - shutting down job task [90m{"reason": "", "user_initiated": false}[0m
+2026-07-11 12:03:20,446 - [36mDEBUG[0m livekit.agents - job exiting [90m{"reason": "", "tid": 32016, "job_id": "AJ_MZEeVFDMgNVL", "room": "mvll-room-1783789257609-1bpr"}[0m
+2026-07-11 12:03:20,447 - [33mWARNING[0m livekit - livekit_api::signal_client:608:livekit_api::signal_client - dropping pass-through signal — no stream available [90m[0m
+2026-07-11 12:03:20,450 - [33mWARNING[0m livekit - livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 8 [90m[0m
+2026-07-11 12:03:20,456 - [36mDEBUG[0m livekit.agents - http_session(): closing the httpclient ctx [90m[0m
+2026-07-11 12:30:23,786 - [32mINFO[0m livekit.agents - received job request [90m{"job_id": "AJ_PRTsU7wudbsc", "dispatch_id": "AD_zGHs8npjxXTy", "room": "mvll-room-1783791021522-jkyl", "room_id": "RM_G7nqEZsxWYHy", "agent_name": "mvll_local", "resuming": false, "enable_recording": false}[0m
+2026-07-11 12:30:23,871 - [36mDEBUG[0m livekit.agents - received assignment [90m{"agent_name": "mvll_local", "room_id": "RM_G7nqEZsxWYHy", "room": "mvll-room-1783791021522-jkyl", "job_id": "AJ_PRTsU7wudbsc", "dispatch_id": "AD_zGHs8npjxXTy", "enable_recording": false}[0m
+2026-07-11 12:30:23,872 - [33mWARNING[0m livekit.agents - no warmed process available for job, waiting for one to be created [90m{"job_id": "AJ_PRTsU7wudbsc"}[0m
+2026-07-11 12:30:23,896 - [32mINFO[0m livekit.agents - initializing job runner [90m{"tid": 15124}[0m
+2026-07-11 12:30:23,897 - [36mDEBUG[0m asyncio - Using proactor: IocpProactor [90m[0m
+2026-07-11 12:30:23,898 - [32mINFO[0m livekit.agents - job runner initialized [90m{"tid": 15124, "elapsed_time": 0.0}[0m
+2026-07-11 12:30:25,182 - [32mINFO[0m google_genai._api_client - The user provided project/location will take precedence over the Vertex AI API key from the environment variable. [90m[0m
+2026-07-11 12:30:25,269 - [33mWARNING[0m livekit.agents - RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead [90m[0m
+2026-07-11 12:30:25,282 - [36mDEBUG[0m livekit.agents - input stream attached [90m{"participant": null, "source": "SOURCE_UNKNOWN", "accepted_sources": ["SOURCE_MICROPHONE"]}[0m
+2026-07-11 12:30:25,284 - [32mINFO[0m livekit.agents - adaptive interruption detector initialized [90m{"base_url": "https://agent-gateway.livekit.cloud/v1", "detection_interval": 0.1, "audio_prefix_duration": 1.0, "max_audio_duration": 3, "min_frames": 2, "threshold": null, "inference_timeout": 0.7}[0m
+2026-07-11 12:30:25,288 - [36mDEBUG[0m livekit.agents - http_session(): creating a new httpclient ctx [90m[0m
+2026-07-11 12:30:25,291 - [36mDEBUG[0m grpc._cython.cygrpc - [_cygrpc] Loaded running loop: id(loop)=1747697852304 [90m[0m
+2026-07-11 12:30:25,291 - [36mDEBUG[0m grpc._cython.cygrpc - [_cygrpc] Loaded running loop: id(loop)=1747697852304 [90m[0m
+2026-07-11 12:30:25,293 - [36mDEBUG[0m grpc._cython.cygrpc - [_cygrpc] Loaded running loop: id(loop)=1747697852304 [90m[0m
+2026-07-11 12:30:25,306 - [36mDEBUG[0m livekit.agents - using audio io: `RoomIO` -> `AgentSession` -> `TranscriptSynchronizer` -> `AudioSinkProxy` -> `RoomIO` [90m[0m
+2026-07-11 12:30:25,307 - [36mDEBUG[0m livekit.agents - using transcript io: `AgentSession` -> `TranscriptSynchronizer` -> `RoomIO` [90m[0m
+2026-07-11 12:30:25,801 - [36mDEBUG[0m livekit.agents - adaptive interruption session created [90m{"default_threshold": 0.656, "effective_threshold": 0.656, "user_override": false}[0m
+2026-07-11 12:30:25,808 - [36mDEBUG[0m livekit.agents - audio turn detector initialized [90m{"model": "turn-detector-v1", "thresholds": {"hi": 0.575, "nl": 0.75, "ko": 0.695, "de": 0.495, "ar": 0.355, "pt": 0.665, "en": 0.56, "id": 0.47, "it": 0.64, "es": 0.59, "fr": 0.575, "zh": 0.59, "ja": 0.37, "tr": 0.65}, "default_threshold": 0.56, "overrides": null}[0m
+2026-07-11 12:30:28,509 - [36mDEBUG[0m livekit.agents - start reading stream [90m{"participant": "visitante", "source": "SOURCE_MICROPHONE"}[0m
+2026-07-11 12:30:39,095 - [32mINFO[0m livekit.agents - closing agent session due to participant disconnect (disable via `RoomInputOptions.close_on_disconnect=False`) [90m{"room": "mvll-room-1783791021522-jkyl", "participant": "visitante", "reason": "CLIENT_INITIATED"}[0m
+2026-07-11 12:30:39,096 - [36mDEBUG[0m livekit.agents - input stream detached [90m{"participant": "visitante", "source": "SOURCE_UNKNOWN", "accepted_sources": ["SOURCE_MICROPHONE"]}[0m
+2026-07-11 12:30:39,098 - [36mDEBUG[0m livekit.agents - stream closed [90m{"participant": "visitante", "source": "SOURCE_MICROPHONE"}[0m
+2026-07-11 12:30:39,103 - [36mDEBUG[0m grpc.aio._call - Client request_iterator raised exception:
+Traceback (most recent call last):
+  File "C:\Users\user\Desktop\MVLL\agent\.venv\Lib\site-packages\grpc\aio\_call.py", line 447, in _consume_request_iterator
+    async for request in request_iterator:
+    ...<10 lines>...
+            return
+  File "C:\Users\user\Desktop\MVLL\agent\.venv\Lib\site-packages\livekit\plugins\google\stt.py", line 766, in input_generator
+    done, _ = await asyncio.wait(
+              ^^^^^^^^^^^^^^^^^^^
+        [frame_task, stop_task], return_when=asyncio.FIRST_COMPLETED
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\tasks.py", line 432, in wait
+    return await _wait(fs, timeout, return_when, loop)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\tasks.py", line 521, in _wait
+    await waiter
+asyncio.exceptions.CancelledError
+ [90m[0m
+2026-07-11 12:30:39,104 - [36mDEBUG[0m grpc._cython.cygrpc - Failed to receive any message from Core: Failed "execute_batch": (<grpc._cython.cygrpc.ReceiveMessageOperation object at 0x00000196EB32FCB0>,) [90m[0m
+2026-07-11 12:30:39,189 - [36mDEBUG[0m livekit.agents - session closed [90m{"reason": "participant_disconnected", "error": null}[0m
+2026-07-11 12:31:02,910 - [36mDEBUG[0m livekit.agents - shutting down job task [90m{"reason": "", "user_initiated": false}[0m
+2026-07-11 12:31:02,912 - [36mDEBUG[0m livekit.agents - job exiting [90m{"reason": "", "tid": 15124, "job_id": "AJ_PRTsU7wudbsc", "room": "mvll-room-1783791021522-jkyl"}[0m
+2026-07-11 12:31:02,915 - [31mERROR[0m livekit - livekit::rtc_engine::rtc_session:646:livekit::rtc_engine::rtc_session - publisher data channel '_reliable' closed unexpectedly [90m[0m
+2026-07-11 12:31:02,915 - [31mERROR[0m livekit - livekit::rtc_engine::rtc_session:646:livekit::rtc_engine::rtc_session - publisher data channel '_lossy' closed unexpectedly [90m[0m
+2026-07-11 12:31:02,915 - [31mERROR[0m livekit - livekit::rtc_engine::rtc_session:646:livekit::rtc_engine::rtc_session - publisher data channel '_data_track' closed unexpectedly [90m[0m
+2026-07-11 12:31:02,916 - [33mWARNING[0m livekit - livekit_api::signal_client:608:livekit_api::signal_client - dropping pass-through signal — no stream available [90m[0m
+2026-07-11 12:31:02,917 - [33mWARNING[0m livekit - livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 15761 [90m[0m
+2026-07-11 12:31:02,925 - [36mDEBUG[0m livekit.agents - http_session(): closing the httpclient ctx [90m[0m
+2026-07-11 14:51:48,565 - [33mWARNING[0m livekit.agents - unexpected message type: 258 [90m{"type": "ERROR", "ws_data": "Cannot write to closing transport"}[0m
+2026-07-11 14:51:48,569 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 0s [90m{"retry_count": 1, "max_retry": 16, "error": "message='worker connection closed unexpectedly', status_code=1006, retryable=True, body=msg.data=None msg.extra=None"}[0m
+2026-07-11 14:51:48,632 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 2s [90m{"retry_count": 2, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-11 14:51:50,644 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 4s [90m{"retry_count": 3, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-12 06:23:26,644 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 6s [90m{"retry_count": 4, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-12 06:23:26,766 - [31mERROR[0m asyncio - Task was destroyed but it is pending!
+task: <Task pending name='Task-2973' coro=<Event.wait() done, defined at C:\Users\user\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\locks.py:200> wait_for=<Future pending cb=[Task.task_wakeup()]>> [90m[0m
+2026-07-12 06:23:32,664 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 8s [90m{"retry_count": 5, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-12 06:23:41,442 - [32mINFO[0m livekit.agents - registered worker [90m{"agent_name": "mvll_local", "deployment": "", "id": "AW_4WiRYruV9ww7", "url": "wss://mvll-bt1qvyr2.livekit.cloud", "region": "Brazil", "protocol": 17}[0m
+2026-07-12 06:23:43,944 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 0s [90m{"retry_count": 1, "max_retry": 16, "error": "message='worker connection closed unexpectedly', status_code=1006, retryable=True, body=msg.data=None msg.extra=None"}[0m
+2026-07-12 06:23:43,945 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 2s [90m{"retry_count": 2, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [The network path was not found]"}[0m
+2026-07-12 06:23:45,947 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 4s [90m{"retry_count": 3, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [The network path was not found]"}[0m
+2026-07-14 08:00:51,514 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 6s [90m{"retry_count": 4, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-14 08:00:59,585 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 8s [90m{"retry_count": 5, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-14 08:01:07,641 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 10s [90m{"retry_count": 6, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-14 08:01:17,679 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 10s [90m{"retry_count": 7, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-14 08:01:27,688 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 10s [90m{"retry_count": 8, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-14 08:01:37,709 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 10s [90m{"retry_count": 9, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-14 08:01:47,731 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 10s [90m{"retry_count": 10, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-14 08:01:58,762 - [32mINFO[0m livekit.agents - registered worker [90m{"agent_name": "mvll_local", "deployment": "", "id": "AW_noSGJFAmWvhz", "url": "wss://mvll-bt1qvyr2.livekit.cloud", "region": "Brazil", "protocol": 17}[0m
+2026-07-14 08:24:39,816 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 0s [90m{"retry_count": 1, "max_retry": 16, "error": "Cannot write to closing transport"}[0m
+2026-07-14 08:24:39,905 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 2s [90m{"retry_count": 2, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-14 08:24:43,060 - [32mINFO[0m livekit.agents - registered worker [90m{"agent_name": "mvll_local", "deployment": "", "id": "AW_mmSJJ6qexYeM", "url": "wss://mvll-bt1qvyr2.livekit.cloud", "region": "Brazil", "protocol": 17}[0m
+2026-07-14 09:51:45,766 - [33mWARNING[0m livekit.agents - unexpected message type: 258 [90m{"type": "ERROR", "ws_data": "Cannot write to closing transport"}[0m
+2026-07-14 09:51:45,811 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 0s [90m{"retry_count": 1, "max_retry": 16, "error": "message='worker connection closed unexpectedly', status_code=1006, retryable=True, body=msg.data=None msg.extra=None"}[0m
+2026-07-14 09:51:45,871 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 2s [90m{"retry_count": 2, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-14 09:51:49,873 - [32mINFO[0m livekit.agents - registered worker [90m{"agent_name": "mvll_local", "deployment": "", "id": "AW_K7nsbKZcAWKz", "url": "wss://mvll-bt1qvyr2.livekit.cloud", "region": "Brazil", "protocol": 17}[0m
+2026-07-14 14:09:15,161 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 0s [90m{"retry_count": 1, "max_retry": 16, "error": "Cannot write to closing transport"}[0m
+2026-07-14 14:09:15,649 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 2s [90m{"retry_count": 2, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-14 14:09:17,658 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 4s [90m{"retry_count": 3, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-14 14:52:32,453 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 6s [90m{"retry_count": 4, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-14 14:52:40,049 - [32mINFO[0m livekit.agents - registered worker [90m{"agent_name": "mvll_local", "deployment": "", "id": "AW_8vDVDefMKg33", "url": "wss://mvll-bt1qvyr2.livekit.cloud", "region": "Brazil", "protocol": 17}[0m
+2026-07-14 15:40:51,445 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 0s [90m{"retry_count": 1, "max_retry": 16, "error": "message='worker connection closed unexpectedly', status_code=1006, retryable=True, body=msg.data=None msg.extra=None"}[0m
+2026-07-14 15:41:33,963 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 2s [90m{"retry_count": 2, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [The semaphore timeout period has expired]"}[0m
+2026-07-14 15:42:20,229 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 4s [90m{"retry_count": 3, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [The semaphore timeout period has expired]"}[0m
+2026-07-14 15:42:32,800 - [32mINFO[0m livekit.agents - registered worker [90m{"agent_name": "mvll_local", "deployment": "", "id": "AW_Ev8a5pNCoJVK", "url": "wss://mvll-bt1qvyr2.livekit.cloud", "region": "Brazil", "protocol": 17}[0m
+2026-07-14 15:58:38,983 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 0s [90m{"retry_count": 1, "max_retry": 16, "error": "message='worker connection closed unexpectedly', status_code=1006, retryable=True, body=msg.data=None msg.extra=None"}[0m
+2026-07-14 15:58:38,996 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 2s [90m{"retry_count": 2, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-14 15:58:41,015 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 4s [90m{"retry_count": 3, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-14 15:59:23,373 - [32mINFO[0m livekit.agents - registered worker [90m{"agent_name": "mvll_local", "deployment": "", "id": "AW_bHTEaC89ihjL", "url": "wss://mvll-bt1qvyr2.livekit.cloud", "region": "Brazil", "protocol": 17}[0m
+2026-07-14 18:14:23,868 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 0s [90m{"retry_count": 1, "max_retry": 16, "error": "Cannot write to closing transport"}[0m
+2026-07-14 18:14:24,840 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 2s [90m{"retry_count": 2, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-14 18:14:26,850 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 4s [90m{"retry_count": 3, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-15 09:54:15,462 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 6s [90m{"retry_count": 4, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-15 09:54:21,474 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 8s [90m{"retry_count": 5, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-15 09:54:29,497 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 10s [90m{"retry_count": 6, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-15 15:48:07,580 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 10s [90m{"retry_count": 7, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-15 15:48:18,257 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 10s [90m{"retry_count": 8, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-15 15:48:28,260 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 10s [90m{"retry_count": 9, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-15 15:48:29,564 - [31mERROR[0m asyncio - Task was destroyed but it is pending!
+task: <Task pending name='Task-58' coro=<Event.wait() running at C:\Users\user\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\locks.py:213> wait_for=<Future pending cb=[Task.task_wakeup()]>> [90m[0m
+2026-07-15 15:48:38,271 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 10s [90m{"retry_count": 10, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-15 15:48:48,285 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 10s [90m{"retry_count": 11, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-15 15:48:59,284 - [32mINFO[0m livekit.agents - registered worker [90m{"agent_name": "mvll_local", "deployment": "", "id": "AW_uforTxsxBF2H", "url": "wss://mvll-bt1qvyr2.livekit.cloud", "region": "Brazil", "protocol": 17}[0m
+2026-07-15 23:01:02,872 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 0s [90m{"retry_count": 1, "max_retry": 16, "error": "Cannot write to closing transport"}[0m
+2026-07-15 23:01:03,644 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 2s [90m{"retry_count": 2, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-15 23:01:05,653 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 4s [90m{"retry_count": 3, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-16 09:12:59,709 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 6s [90m{"retry_count": 4, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-16 09:13:07,261 - [32mINFO[0m livekit.agents - registered worker [90m{"agent_name": "mvll_local", "deployment": "", "id": "AW_SyG3pDDGxDQD", "url": "wss://mvll-bt1qvyr2.livekit.cloud", "region": "Brazil", "protocol": 17}[0m
+2026-07-16 09:26:24,857 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 0s [90m{"retry_count": 1, "max_retry": 16, "error": "Cannot write to closing transport"}[0m
+2026-07-16 09:26:27,188 - [32mINFO[0m livekit.agents - registered worker [90m{"agent_name": "mvll_local", "deployment": "", "id": "AW_CzapBcSF6Ktd", "url": "wss://mvll-bt1qvyr2.livekit.cloud", "region": "Brazil", "protocol": 17}[0m
+2026-07-16 11:04:33,256 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 0s [90m{"retry_count": 1, "max_retry": 16, "error": "Cannot write to closing transport"}[0m
+2026-07-16 11:04:33,969 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 2s [90m{"retry_count": 2, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-16 11:04:35,978 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 4s [90m{"retry_count": 3, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-16 11:19:55,092 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 6s [90m{"retry_count": 4, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-16 11:20:01,975 - [32mINFO[0m livekit.agents - registered worker [90m{"agent_name": "mvll_local", "deployment": "", "id": "AW_JStEuSKtgeZF", "url": "wss://mvll-bt1qvyr2.livekit.cloud", "region": "Brazil", "protocol": 17}[0m
+2026-07-16 19:06:33,900 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 0s [90m{"retry_count": 1, "max_retry": 16, "error": "message='worker connection closed unexpectedly', status_code=1006, retryable=True, body=msg.data=None msg.extra=None"}[0m
+2026-07-16 19:06:33,907 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 2s [90m{"retry_count": 2, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-16 19:06:35,911 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 4s [90m{"retry_count": 3, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-17 09:20:56,563 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 6s [90m{"retry_count": 4, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-17 09:21:04,057 - [32mINFO[0m livekit.agents - registered worker [90m{"agent_name": "mvll_local", "deployment": "", "id": "AW_wXanqAYGhRAf", "url": "wss://mvll-bt1qvyr2.livekit.cloud", "region": "Brazil", "protocol": 17}[0m
+2026-07-17 14:07:32,554 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 0s [90m{"retry_count": 1, "max_retry": 16, "error": "message='worker connection closed unexpectedly', status_code=1006, retryable=True, body=msg.data=None msg.extra=None"}[0m
+2026-07-17 14:07:32,563 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 2s [90m{"retry_count": 2, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-17 14:07:34,580 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 4s [90m{"retry_count": 3, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-17 16:34:36,863 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 6s [90m{"retry_count": 4, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-17 16:34:44,016 - [33mWARNING[0m livekit.agents - failed to connect to livekit, retrying in 8s [90m{"retry_count": 5, "max_retry": 16, "error": "Cannot connect to host mvll-bt1qvyr2.livekit.cloud:443 ssl:default [getaddrinfo failed]"}[0m
+2026-07-17 16:34:57,810 - [32mINFO[0m livekit.agents - registered worker [90m{"agent_name": "mvll_local", "deployment": "", "id": "AW_n76X24HYocUw", "url": "wss://mvll-bt1qvyr2.livekit.cloud", "region": "Brazil", "protocol": 17}[0m

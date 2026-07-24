@@ -1,6 +1,95 @@
 INFO:     Will watch for changes in these directories: ['C:\\Users\\user\\Desktop\\MVLL\\backend\\app']
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [21584] using WatchFiles
-INFO:     Started server process [44808]
+INFO:     Started reloader process [32156] using WatchFiles
+INFO:     Started server process [47312]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
+Error generando la respuesta del avatar (Bedrock): An error occurred (ValidationException) when calling the Converse operation: Operation not allowed
+TTS Cache MISS. Generando audio nuevo...
+INFO:     127.0.0.1:56598 - "POST /api/chat HTTP/1.1" 200 OK
+Error generando la respuesta del avatar (Bedrock): An error occurred (ValidationException) when calling the Converse operation: Operation not allowed
+TTS Cache MISS. Generando audio nuevo...
+INFO:     127.0.0.1:56605 - "POST /api/chat HTTP/1.1" 200 OK
+Error generando la respuesta del avatar (Bedrock): An error occurred (ValidationException) when calling the Converse operation: Operation not allowed
+TTS Cache MISS. Generando audio nuevo...
+INFO:     127.0.0.1:57733 - "POST /api/chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57591 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:57591 - "GET /style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:57591 - "GET /app.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:57591 - "GET /api/config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57591 - "POST /api/chat/stream HTTP/1.1" 200 OK
+Error generando la respuesta del avatar (stream, Bedrock): An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed
+INFO:     127.0.0.1:58328 - "POST /api/chat/stream HTTP/1.1" 200 OK
+Error generando la respuesta del avatar (stream, Bedrock): An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed
+INFO:     127.0.0.1:58328 - "POST /api/chat/stream HTTP/1.1" 200 OK
+Error generando la respuesta del avatar (stream, Bedrock): An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed
+INFO:     127.0.0.1:63465 - "POST /api/chat/stream HTTP/1.1" 200 OK
+Error generando la respuesta del avatar (stream, Bedrock): An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed
+Error generando la respuesta del avatar (Bedrock): An error occurred (ValidationException) when calling the Converse operation: Operation not allowed
+TTS Cache MISS. Generando audio nuevo...
+INFO:     127.0.0.1:65119 - "POST /api/chat HTTP/1.1" 200 OK
+Error generando la respuesta del avatar (Bedrock): An error occurred (ValidationException) when calling the Converse operation: Operation not allowed
+TTS Cache MISS. Generando audio nuevo...
+INFO:     127.0.0.1:65126 - "POST /api/chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56736 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:56736 - "GET /style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:56736 - "GET /app.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:56736 - "GET /api/config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56736 - "POST /api/chat/stream HTTP/1.1" 200 OK
+Error generando la respuesta del avatar (stream, Bedrock): An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed
+INFO:     127.0.0.1:50643 - "POST /api/chat/stream HTTP/1.1" 200 OK
+Error generando la respuesta del avatar (stream, Bedrock): An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed
+INFO:     127.0.0.1:63298 - "POST /api/chat/stream HTTP/1.1" 200 OK
+Error generando la respuesta del avatar (stream, Bedrock): An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed
+INFO:     127.0.0.1:55731 - "POST /api/chat/stream HTTP/1.1" 200 OK
+Error generando la respuesta del avatar (stream, Bedrock): An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed
+INFO:     127.0.0.1:60283 - "GET /api/livekit/token?room=mvll-room-1783786072082-e8up HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49397 - "POST /api/chat/stream HTTP/1.1" 200 OK
+Error generando la respuesta del avatar (stream, Bedrock): An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed
+INFO:     127.0.0.1:51614 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:51614 - "GET /api/config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51614 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51614 - "GET /style.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60996 - "GET /mario.gif HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61809 - "GET /mario.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61809 - "GET /app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60996 - "GET /api/config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60996 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60996 - "POST /api/chat/stream HTTP/1.1" 200 OK
+Error generando la respuesta del avatar (stream, Bedrock): An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed
+INFO:     127.0.0.1:51953 - "POST /api/chat/stream HTTP/1.1" 200 OK
+Error generando la respuesta del avatar (stream, Bedrock): An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed
+INFO:     127.0.0.1:62830 - "POST /api/chat/stream HTTP/1.1" 200 OK
+Error generando la respuesta del avatar (stream, Bedrock): An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed
+INFO:     127.0.0.1:62830 - "POST /api/chat/stream HTTP/1.1" 200 OK
+Error generando la respuesta del avatar (stream, Bedrock): An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed
+INFO:     127.0.0.1:62324 - "GET /api/livekit/token?room=mvll-room-1783786410050-4rqe HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49170 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49170 - "GET /style.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53644 - "GET /mario.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49170 - "GET /mario.gif HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53644 - "GET /app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49170 - "GET /api/config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49170 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49170 - "POST /api/chat/stream HTTP/1.1" 200 OK
+Error generando la respuesta del avatar (stream, Bedrock): An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed
+INFO:     127.0.0.1:49170 - "POST /api/chat/stream HTTP/1.1" 200 OK
+Error generando la respuesta del avatar (stream, Bedrock): An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed
+INFO:     127.0.0.1:64254 - "GET /api/livekit/token?room=mvll-room-1783786517636-26hq HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56513 - "GET /api/config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60214 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:60214 - "GET /style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:60214 - "GET /app.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:60214 - "GET /api/config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60214 - "POST /api/chat/stream HTTP/1.1" 200 OK
+Error generando la respuesta del avatar (stream, Bedrock): An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed
+INFO:     127.0.0.1:58484 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58484 - "GET /style.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55380 - "GET /mario.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58484 - "GET /mario.gif HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55380 - "GET /app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58484 - "GET /api/config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58484 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58484 - "POST /api/chat/stream HTTP/1.1" 200 OK
+Error generando la respuesta del avatar (stream, Bedrock): An error occurred (ValidationException) when calling the ConverseStream operation: Operation not allowed
+INFO:     127.0.0.1:58484 - "GET /api/livekit/token?room=mvll-room-1783789257609-1bpr HTTP/1.1" 200 OK

@@ -1,0 +1,9 @@
+INFO:     Will watch for changes in these directories: ['C:\\Users\\user\\Desktop\\MVLL\\backend\\app']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [26560] using WatchFiles
+INFO:     Started server process [31532]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+Error generando la respuesta del avatar (Bedrock): An error occurred (ResourceNotFoundException) when calling the Converse operation: Model use case details have not been submitted for this account. Fill out the Anthropic use case details form before using the model. If you have already filled out the form, try again in 15 minutes.
+TTS Cache MISS. Generando audio nuevo...
+INFO:     127.0.0.1:64955 - "POST /api/chat HTTP/1.1" 200 OK

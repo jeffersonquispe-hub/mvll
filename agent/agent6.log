@@ -1,0 +1,12 @@
+C:\Users\user\Desktop\MVLL\agent\mvll_agent.py:52: DeprecationWarning: livekit-plugins-silero is deprecated and will be removed in v2.0. AgentSession now defaults to the bundled silero VAD, so you can drop the explicit `vad=` argument entirely; pass `vad=None` to opt out, or use `from livekit.agents import inference; inference.VAD(model="silero", ...)` to customise options.
+  from livekit.plugins import google, elevenlabs, silero
+in-process auto-reload has been removed from the Python CLI; use `lk agent dev` for hot-reload
+[Agent Setup] Configured ElevenLabs API Key
+2026-07-21 18:08:12,375 - [36mDEBUG[0m asyncio - Using proactor: IocpProactor [90m[0m
+2026-07-21 18:08:12,376 - [32mINFO[0m livekit.agents - starting worker [90m{"version": "1.6.4", "rtc-version": "1.1.12"}[0m
+2026-07-21 18:08:12,377 - [32mINFO[0m livekit.agents - plugin registered [90m{"plugin": "livekit.plugins.aws", "version": "1.6.4"}[0m
+2026-07-21 18:08:12,377 - [32mINFO[0m livekit.agents - plugin registered [90m{"plugin": "livekit.plugins.google", "version": "1.6.4"}[0m
+2026-07-21 18:08:12,377 - [32mINFO[0m livekit.agents - plugin registered [90m{"plugin": "livekit.plugins.elevenlabs", "version": "1.6.4"}[0m
+2026-07-21 18:08:12,377 - [32mINFO[0m livekit.agents - plugin registered [90m{"plugin": "livekit.plugins.silero", "version": "1.6.4"}[0m
+2026-07-21 18:08:12,392 - [32mINFO[0m livekit.agents - HTTP server listening on :55768 [90m[0m
+2026-07-21 18:08:13,079 - [32mINFO[0m livekit.agents - registered worker [90m{"agent_name": "mvll_local", "deployment": "", "id": "AW_GDePzNesL4bu", "url": "wss://mvll-bt1qvyr2.livekit.cloud", "region": "Brazil", "protocol": 17}[0m
