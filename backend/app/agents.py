@@ -1,6 +1,102 @@
+import re
 from google import genai
 from app.config import settings
 from app.bedrock_fallback import is_bedrock_configured, run_bedrock_response, run_bedrock_stream
+
+# Gemini 2.5 Flash Lite a veces escribe el razonamiento que el prompt le pide pensar
+# "en silencio" como texto plano (ej. "(Silencio mental)\nPostura: ...", "(Piensa:
+# ...)") en vez de omitirlo del todo. El prompt ya lo prohíbe explícitamente (ver
+# build_fused_prompt), pero eso solo reduce la frecuencia — este filtro es la
+# garantía a nivel de código, mismo mecanismo que agent/mvll_agent.py
+# (MVLLAgent.llm_node): en todos los casos vistos hasta ahora la respuesta
+# problemática arranca con "(" y el contenido real viene después de la primera
+# línea en blanco, así que se filtra por ese patrón en vez de perseguir etiquetas
+# puntuales (el modelo inventa una nueva cada vez).
+_LEAK_LABEL = r"(?:Silencio mental|Postura|Argumento|Referencia|Respuesta)(?:\s*\d+)?"
+_MARKUP = r"[\s\*\-_]*"  # tolera bullets/negrita markdown alrededor de la etiqueta
+_REASONING_LEAK_RE = re.compile(
+    rf"^{_MARKUP}\(?{_MARKUP}{_LEAK_LABEL}{_MARKUP}\)?{_MARKUP}:"
+    rf"|^{_MARKUP}\({_MARKUP}{_LEAK_LABEL}{_MARKUP}\){_MARKUP}$",
+    re.IGNORECASE,
+)
+# Si la respuesta arranca con "(" pero no aparece una línea en blanco dentro de este
+# umbral de caracteres, se asume que no era un preámbulo de razonamiento.
+_PREAMBLE_SAFETY_CAP = 400
+
+# Este prompt (a diferencia del de agent/mvll_agent.py) le pide al modelo clasificar
+# el mensaje en silencio como "(A)" o "(B)" (ver PASO 1 en build_fused_prompt) — a
+# veces repite esa etiqueta pegada directo al inicio de la respuesta real, sin línea
+# en blanco que las separe (ej. "(B) El populismo en América Latina es..."). Se
+# filtra aparte porque no encaja en el patrón de preámbulo-hasta-línea-en-blanco.
+_CLASSIFICATION_TAG_RE = re.compile(r"^\(\s*[A-Za-z]\)\s*")
+
+
+def _strip_reasoning_preamble(text: str) -> str:
+    """Filtra, de una respuesta ya completa, la etiqueta de clasificación, el
+    preámbulo de razonamiento (si arranca con "(") y cualquier línea suelta con una
+    etiqueta conocida."""
+    text = _CLASSIFICATION_TAG_RE.sub("", text.lstrip(), count=1)
+    stripped = text.lstrip()
+    if stripped.startswith("("):
+        idx = stripped.find("\n\n")
+        if idx != -1:
+            text = stripped[idx + 2 :]
+    lines = text.split("\n")
+    return "\n".join(line for line in lines if not _REASONING_LEAK_RE.match(line)).strip()
+
+
+def _filter_reasoning_leak_stream(chunks):
+    """Envoltorio de streaming: aplica el mismo filtro que _strip_reasoning_preamble
+    incrementalmente, a medida que llegan los fragmentos, en vez de esperar a que
+    termine toda la respuesta."""
+    buffer = ""
+    tag_checked = False  # todavía no se decidió si hay etiqueta de clasificación
+    stripping_preamble = None  # None = todavía no se vio el primer carácter no blanco
+    for piece in chunks:
+        buffer += piece
+
+        if not tag_checked:
+            # Esperar unos caracteres más antes de decidir: "(B) " puede llegar
+            # repartido en varios fragmentos (ej. "(" solo en el primer chunk).
+            if len(buffer) < 5 and "\n" not in buffer:
+                continue
+            tag_checked = True
+            buffer = _CLASSIFICATION_TAG_RE.sub("", buffer, count=1)
+
+        if stripping_preamble is None:
+            stripped = buffer.lstrip()
+            if not stripped:
+                continue
+            stripping_preamble = stripped.startswith("(")
+
+        if stripping_preamble:
+            idx = buffer.find("\n\n")
+            if idx != -1:
+                buffer = buffer[idx + 2 :]
+                stripping_preamble = False
+            elif len(buffer) < _PREAMBLE_SAFETY_CAP:
+                continue
+            else:
+                stripping_preamble = False
+
+        if "\n" not in buffer:
+            continue
+        *complete_lines, buffer = buffer.split("\n")
+        cleaned = "\n".join(
+            line for line in complete_lines if not _REASONING_LEAK_RE.match(line)
+        )
+        if cleaned:
+            yield cleaned + "\n"
+
+    if not tag_checked:
+        buffer = _CLASSIFICATION_TAG_RE.sub("", buffer, count=1)
+    if stripping_preamble:
+        idx = buffer.find("\n\n")
+        if idx != -1:
+            buffer = buffer[idx + 2 :]
+    if buffer and not _REASONING_LEAK_RE.match(buffer):
+        yield buffer
+
 
 # Respuesta de respaldo cuando no hay credenciales de Gemini o la llamada falla
 FALLBACK_RESPONSE = (
@@ -75,7 +171,7 @@ def run_response(prompt: str) -> str:
     """
     if is_bedrock_configured():
         try:
-            return run_bedrock_response(build_fused_prompt(prompt))
+            return _strip_reasoning_preamble(run_bedrock_response(build_fused_prompt(prompt)))
         except Exception as e:
             print(f"Error generando la respuesta del avatar (Bedrock): {e}")
 
@@ -85,7 +181,7 @@ def run_response(prompt: str) -> str:
                 model=get_model_name(),
                 contents=build_fused_prompt(prompt),
             )
-            return response.text.strip()
+            return _strip_reasoning_preamble(response.text.strip())
         except Exception as e:
             print(f"Error generando la respuesta del avatar (fallback Vertex Gemini): {e}")
 
@@ -104,7 +200,7 @@ def run_response_stream(prompt: str):
     if is_bedrock_configured():
         yielded_any = False
         try:
-            for piece in run_bedrock_stream(build_fused_prompt(prompt)):
+            for piece in _filter_reasoning_leak_stream(run_bedrock_stream(build_fused_prompt(prompt))):
                 yielded_any = True
                 yield piece
         except Exception as e:
@@ -119,10 +215,10 @@ def run_response_stream(prompt: str):
                 model=get_model_name(),
                 contents=build_fused_prompt(prompt),
             )
-            for chunk in stream:
-                if chunk.text:
-                    yielded_any = True
-                    yield chunk.text
+            raw_pieces = (chunk.text for chunk in stream if chunk.text)
+            for piece in _filter_reasoning_leak_stream(raw_pieces):
+                yielded_any = True
+                yield piece
         except Exception as e:
             print(f"Error generando la respuesta del avatar (stream, fallback Vertex Gemini): {e}")
         if yielded_any:
