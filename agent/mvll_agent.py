@@ -222,18 +222,52 @@ y quedarte solo con la respuesta.
 # que sin este filtro se sintetiza y se escucha en voz alta tal cual. El prompt ya lo
 # prohíbe explícitamente (ver MVLL_SYSTEM_PROMPT), pero eso solo reduce la frecuencia;
 # esto es la garantía a nivel de código de que nunca llega a hablarse.
-_LEAK_LABEL = r"(?:Silencio mental|Postura|Argumento|Referencia|Respuesta)(?:\s*\d+)?"
+#
+# "Respuesta" es un caso aparte: a diferencia de "Postura"/"Argumento"/"Referencia"
+# (razonamiento puro, se descarta la línea entera) el modelo a veces la usa como
+# prefijo de la respuesta REAL en la misma línea, con un solo salto de línea antes
+# y sin línea en blanco que la separe del resto (ej. "(Silencio mental)\nPostura:
+# ...\nArgumento: ...\nRespuesta: Afortunadamente, estos días...") — si se tratara
+# igual que las demás etiquetas se perdería la respuesta entera, no solo la etiqueta.
+_DROP_LABEL = r"(?:Silencio mental|Postura|Argumento|Referencia)(?:\s*\d+)?"
+_ANSWER_LABEL = r"Respuesta(?:\s*\d+)?"
 _MARKUP = r"[\s\*\-_]*"  # tolera bullets/negrita markdown alrededor de la etiqueta
+
 _REASONING_LEAK_RE = re.compile(
-    rf"^{_MARKUP}\(?{_MARKUP}{_LEAK_LABEL}{_MARKUP}\)?{_MARKUP}:"
-    rf"|^{_MARKUP}\({_MARKUP}{_LEAK_LABEL}{_MARKUP}\){_MARKUP}$",
+    rf"^{_MARKUP}\(?{_MARKUP}{_DROP_LABEL}{_MARKUP}\)?{_MARKUP}:"  # "Postura: ..." -> línea entera fuera
+    rf"|^{_MARKUP}\({_MARKUP}{_DROP_LABEL}{_MARKUP}\){_MARKUP}$"  # "(Silencio mental)" sola -> fuera
+    rf"|^{_MARKUP}\({_MARKUP}{_ANSWER_LABEL}{_MARKUP}\){_MARKUP}$",  # "(Respuesta)" sola (sin contenido) -> fuera
+    re.IGNORECASE,
+)
+_ANSWER_PREFIX_RE = re.compile(
+    rf"^{_MARKUP}\(?{_MARKUP}{_ANSWER_LABEL}{_MARKUP}\)?{_MARKUP}:{_MARKUP}",
     re.IGNORECASE,
 )
 
-# Si una respuesta arranca con "(" pero no aparece una línea en blanco dentro de
-# este umbral de caracteres, se asume que no era un preámbulo de razonamiento (ver
-# MVLLAgent.llm_node) y se deja de intentar filtrarla.
-_PREAMBLE_SAFETY_CAP = 400
+
+def _clean_line(line: str) -> str | None:
+    """None si la línea es puro razonamiento a descartar; si no, la línea (con el
+    prefijo "Respuesta:" recortado si lo tenía, conservando el contenido real que
+    sigue en la misma línea)."""
+    if _REASONING_LEAK_RE.match(line):
+        return None
+    return _ANSWER_PREFIX_RE.sub("", line, count=1)
+
+
+def _clean_lines(text: str) -> str:
+    cleaned = (_clean_line(line) for line in text.split("\n"))
+    return "\n".join(line for line in cleaned if line is not None)
+
+
+# Ventana (en caracteres) donde se busca la primera línea en blanco al arrancar una
+# respuesta. Antes esto solo se activaba si el texto empezaba con "(", pero el
+# modelo también se filtró sin paréntesis (ej. repitiendo literal una frase de
+# clasificación del prompt seguida de "\n\n") — así que ahora se vigila SIEMPRE, sin
+# condicionarlo al primer carácter. El prompt nunca pide una respuesta con línea en
+# blanco interna (2-4 oraciones seguidas para hablar), así que cualquier "\n\n"
+# temprano es señal de preámbulo. Acotado a una ventana corta para no demorar el
+# primer audio de una respuesta limpia (que jamás va a tener "\n\n").
+_PREAMBLE_WATCH_WINDOW = 120
 
 
 class MVLLAgent(Agent):
@@ -247,17 +281,18 @@ class MVLLAgent(Agent):
     async def llm_node(self, chat_ctx, tools, model_settings):
         """Filtra el razonamiento que el LLM a veces escribe como texto plano pese a
         la instrucción del prompt de pensarlo "en silencio". Dos capas, porque el
-        modelo inventa etiquetas nuevas cada vez ("Postura:", "(Piensa: ...)", etc.)
-        y perseguir palabras puntuales es un juego sin fin:
-        1) Si la respuesta entera arranca con "(", es un preámbulo de razonamiento
-           en TODOS los casos vistos hasta ahora — se descarta todo hasta la primera
-           línea en blanco, sea cual sea la etiqueta que use.
+        modelo inventa variantes nuevas cada vez ("Postura:", "(Piensa: ...)",
+        "Charla cotidiana." sin paréntesis, etc.) y perseguir palabras puntuales es
+        un juego sin fin:
+        1) Se vigila SIEMPRE (sin importar con qué arranca la respuesta) si aparece
+           una línea en blanco dentro de los primeros _PREAMBLE_WATCH_WINDOW
+           caracteres — el prompt nunca pide una respuesta con línea en blanco
+           interna, así que es señal de preámbulo y se descarta todo lo anterior.
         2) Además, cualquier línea suelta con una etiqueta conocida se filtra por
-           separado (ver _REASONING_LEAK_RE), por si aparece sin el paréntesis.
+           separado (ver _REASONING_LEAK_RE), por si no hubo línea en blanco.
         """
         buffer = ""
-        # None = todavía no se vio el primer carácter no blanco de la respuesta.
-        stripping_preamble: bool | None = None
+        watching_preamble = True  # buscando "\n\n" temprano, ver _PREAMBLE_WATCH_WINDOW
         async for chunk in Agent.default.llm_node(self, chat_ctx, tools, model_settings):
             if isinstance(chunk, llm.ChatChunk) and chunk.delta and chunk.delta.content:
                 content = chunk.delta.content
@@ -269,30 +304,24 @@ class MVLLAgent(Agent):
 
             buffer += content
 
-            if stripping_preamble is None:
-                stripped = buffer.lstrip()
-                if not stripped:
-                    continue
-                stripping_preamble = stripped.startswith("(")
-
-            if stripping_preamble:
+            if watching_preamble:
                 idx = buffer.find("\n\n")
                 if idx != -1:
                     buffer = buffer[idx + 2 :]
-                    stripping_preamble = False
-                elif len(buffer) < _PREAMBLE_SAFETY_CAP:
+                    watching_preamble = False
+                elif len(buffer) < _PREAMBLE_WATCH_WINDOW:
                     # Todavía esperando el final del preámbulo (la línea en blanco).
                     continue
                 else:
-                    # Pasado el umbral sin encontrar línea en blanco: probablemente
+                    # Pasada la ventana sin encontrar línea en blanco: probablemente
                     # nunca fue un preámbulo de razonamiento. Dejar de filtrar.
-                    stripping_preamble = False
+                    watching_preamble = False
 
             if "\n" not in buffer:
                 continue
             *complete_lines, buffer = buffer.split("\n")
             cleaned = "\n".join(
-                line for line in complete_lines if not _REASONING_LEAK_RE.match(line)
+                line for line in (_clean_line(l) for l in complete_lines) if line is not None
             )
             if not cleaned:
                 continue
@@ -304,15 +333,20 @@ class MVLLAgent(Agent):
             else:
                 yield cleaned + "\n"
 
-        if stripping_preamble:
+        if watching_preamble:
             # La respuesta entera terminó sin nunca encontrar la línea en blanco —
             # probablemente no era un preámbulo, así que se deja pasar tal cual en
             # vez de arriesgarse a dejar a Mario en silencio.
             idx = buffer.find("\n\n")
             if idx != -1:
                 buffer = buffer[idx + 2 :]
-        if buffer and not _REASONING_LEAK_RE.match(buffer):
-            yield buffer
+        # Filtrado línea por línea siempre (no un simple match() sobre todo el
+        # buffer): si la respuesta nunca tuvo "\n\n" ni superó la ventana, llega acá
+        # con el texto crudo completo y saltos simples entre etiquetas — hay que
+        # partirlo por línea para que cada una se filtre por separado.
+        cleaned = _clean_lines(buffer)
+        if cleaned:
+            yield cleaned
 
 
 def prewarm(proc) -> None:

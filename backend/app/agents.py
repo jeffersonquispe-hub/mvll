@@ -12,16 +12,53 @@ from app.bedrock_fallback import is_bedrock_configured, run_bedrock_response, ru
 # problemática arranca con "(" y el contenido real viene después de la primera
 # línea en blanco, así que se filtra por ese patrón en vez de perseguir etiquetas
 # puntuales (el modelo inventa una nueva cada vez).
-_LEAK_LABEL = r"(?:Silencio mental|Postura|Argumento|Referencia|Respuesta)(?:\s*\d+)?"
+#
+# "Respuesta" es un caso aparte: a diferencia de "Postura"/"Argumento"/"Referencia"
+# (que son razonamiento puro, se descartan enteras) el modelo a veces la usa como
+# prefijo de la respuesta REAL en la misma línea (ej. "Respuesta: Afortunadamente,
+# estos días..." con un solo salto de línea antes, sin línea en blanco) — si se
+# tratara igual que las demás, se perdería la respuesta entera, no solo la etiqueta.
+_DROP_LABEL = r"(?:Silencio mental|Postura|Argumento|Referencia)(?:\s*\d+)?"
+_ANSWER_LABEL = r"Respuesta(?:\s*\d+)?"
 _MARKUP = r"[\s\*\-_]*"  # tolera bullets/negrita markdown alrededor de la etiqueta
+
 _REASONING_LEAK_RE = re.compile(
-    rf"^{_MARKUP}\(?{_MARKUP}{_LEAK_LABEL}{_MARKUP}\)?{_MARKUP}:"
-    rf"|^{_MARKUP}\({_MARKUP}{_LEAK_LABEL}{_MARKUP}\){_MARKUP}$",
+    rf"^{_MARKUP}\(?{_MARKUP}{_DROP_LABEL}{_MARKUP}\)?{_MARKUP}:"  # "Postura: ..." -> línea entera fuera
+    rf"|^{_MARKUP}\({_MARKUP}{_DROP_LABEL}{_MARKUP}\){_MARKUP}$"  # "(Silencio mental)" sola -> fuera
+    rf"|^{_MARKUP}\({_MARKUP}{_ANSWER_LABEL}{_MARKUP}\){_MARKUP}$",  # "(Respuesta)" sola (sin contenido) -> fuera
     re.IGNORECASE,
 )
-# Si la respuesta arranca con "(" pero no aparece una línea en blanco dentro de este
-# umbral de caracteres, se asume que no era un preámbulo de razonamiento.
-_PREAMBLE_SAFETY_CAP = 400
+_ANSWER_PREFIX_RE = re.compile(
+    rf"^{_MARKUP}\(?{_MARKUP}{_ANSWER_LABEL}{_MARKUP}\)?{_MARKUP}:{_MARKUP}",
+    re.IGNORECASE,
+)
+
+
+def _clean_line(line: str) -> str | None:
+    """None si la línea es puro razonamiento a descartar; si no, la línea (con el
+    prefijo "Respuesta:" recortado si lo tenía, conservando el contenido real que
+    sigue en la misma línea)."""
+    if _REASONING_LEAK_RE.match(line):
+        return None
+    return _ANSWER_PREFIX_RE.sub("", line, count=1)
+
+
+def _clean_lines(text: str) -> str:
+    cleaned = (_clean_line(line) for line in text.split("\n"))
+    return "\n".join(line for line in cleaned if line is not None)
+
+
+# Ventana (en caracteres) donde se busca la primera línea en blanco al arrancar
+# una respuesta. Antes esto solo se activaba si el texto empezaba con "(", pero el
+# modelo también se filtró sin paréntesis (ej. "Charla cotidiana.\n\n¡Ah, la
+# carapulcra!...", repitiendo literal el nombre de la categoría del PASO 1 del
+# prompt) — así que ahora se vigila SIEMPRE, sin condicionarlo al primer carácter.
+# El prompt nunca pide una respuesta con línea en blanco interna (es prosa continua
+# de un párrafo), así que cualquier "\n\n" temprano es señal de preámbulo, venga
+# como venga. Acotado a una ventana corta para no demorar el primer token de una
+# respuesta limpia (que jamás va a tener "\n\n", así que siempre paga la ventana
+# completa antes de empezar a fluir).
+_PREAMBLE_WATCH_WINDOW = 120
 
 # Este prompt (a diferencia del de agent/mvll_agent.py) le pide al modelo clasificar
 # el mensaje en silencio como "(A)" o "(B)" (ver PASO 1 en build_fused_prompt) — a
@@ -33,16 +70,17 @@ _CLASSIFICATION_TAG_RE = re.compile(r"^\(\s*[A-Za-z]\)\s*")
 
 def _strip_reasoning_preamble(text: str) -> str:
     """Filtra, de una respuesta ya completa, la etiqueta de clasificación, el
-    preámbulo de razonamiento (si arranca con "(") y cualquier línea suelta con una
-    etiqueta conocida."""
+    preámbulo de razonamiento (si aparece una línea en blanco temprano) y cualquier
+    línea suelta con una etiqueta conocida."""
     text = _CLASSIFICATION_TAG_RE.sub("", text.lstrip(), count=1)
-    stripped = text.lstrip()
-    if stripped.startswith("("):
-        idx = stripped.find("\n\n")
-        if idx != -1:
-            text = stripped[idx + 2 :]
-    lines = text.split("\n")
-    return "\n".join(line for line in lines if not _REASONING_LEAK_RE.match(line)).strip()
+    idx = text.find("\n\n")
+    if idx != -1 and idx < _PREAMBLE_WATCH_WINDOW:
+        text = text[idx + 2 :]
+    # Filtrado línea por línea siempre, no solo cuando hubo línea en blanco: si el
+    # preámbulo nunca tiene "\n\n" (ej. "(Silencio mental)\nPostura: ...\nRespuesta:
+    # ...", todo con saltos simples), el texto entero llega hasta acá sin recortar,
+    # y son las etiquetas sueltas las que terminan de limpiarlo.
+    return _clean_lines(text).strip()
 
 
 def _filter_reasoning_leak_stream(chunks):
@@ -51,7 +89,7 @@ def _filter_reasoning_leak_stream(chunks):
     termine toda la respuesta."""
     buffer = ""
     tag_checked = False  # todavía no se decidió si hay etiqueta de clasificación
-    stripping_preamble = None  # None = todavía no se vio el primer carácter no blanco
+    watching_preamble = True  # buscando "\n\n" temprano, ver _PREAMBLE_WATCH_WINDOW
     for piece in chunks:
         buffer += piece
 
@@ -63,39 +101,38 @@ def _filter_reasoning_leak_stream(chunks):
             tag_checked = True
             buffer = _CLASSIFICATION_TAG_RE.sub("", buffer, count=1)
 
-        if stripping_preamble is None:
-            stripped = buffer.lstrip()
-            if not stripped:
-                continue
-            stripping_preamble = stripped.startswith("(")
-
-        if stripping_preamble:
+        if watching_preamble:
             idx = buffer.find("\n\n")
             if idx != -1:
                 buffer = buffer[idx + 2 :]
-                stripping_preamble = False
-            elif len(buffer) < _PREAMBLE_SAFETY_CAP:
+                watching_preamble = False
+            elif len(buffer) < _PREAMBLE_WATCH_WINDOW:
                 continue
             else:
-                stripping_preamble = False
+                watching_preamble = False
 
         if "\n" not in buffer:
             continue
         *complete_lines, buffer = buffer.split("\n")
         cleaned = "\n".join(
-            line for line in complete_lines if not _REASONING_LEAK_RE.match(line)
+            line for line in (_clean_line(l) for l in complete_lines) if line is not None
         )
         if cleaned:
             yield cleaned + "\n"
 
     if not tag_checked:
         buffer = _CLASSIFICATION_TAG_RE.sub("", buffer, count=1)
-    if stripping_preamble:
+    if watching_preamble:
         idx = buffer.find("\n\n")
         if idx != -1:
             buffer = buffer[idx + 2 :]
-    if buffer and not _REASONING_LEAK_RE.match(buffer):
-        yield buffer
+    # Filtrado línea por línea siempre (no un simple match() sobre todo el buffer):
+    # si la respuesta entera nunca tuvo "\n\n" ni superó la ventana, watching_preamble
+    # queda True hasta acá y el buffer trae todo el texto crudo con saltos simples
+    # entre etiquetas — hay que partirlo por línea para que cada etiqueta se filtre.
+    cleaned = _clean_lines(buffer)
+    if cleaned:
+        yield cleaned
 
 
 # Respuesta de respaldo cuando no hay credenciales de Gemini o la llamada falla
