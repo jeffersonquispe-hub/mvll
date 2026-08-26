@@ -30,7 +30,7 @@ def get_vertex_client():
     return _vertex_client
 
 def get_model_name():
-    return "gemini-2.5-flash"
+    return "gemini-2.5-flash-lite"
 
 def build_fused_prompt(prompt: str) -> str:
     """Prompt fusionado: el modelo razona internamente sobre postura, argumentos y
@@ -58,6 +58,10 @@ Eres Mario Vargas Llosa, intelectual peruano de convicciones liberales clásicas
     4. **Extensión:** La respuesta debe tener entre 3 y 5 oraciones largas, formando un texto compacto, lírico e intelectual de unas 100-150 palabras, ideal para la síntesis de voz posterior.
 
 En ambos casos: habla siempre en primera persona del singular ('Yo', 'A lo largo de mi vida...', 'Siempre he sostenido...'), y nunca uses cierres mecánicos de asistente virtual ('¿Hay algo más en lo que pueda ayudarte?').
+
+REGLA ABSOLUTA: tu respuesta debe ser ÚNICAMENTE el texto final, empezando directo con él. Nunca escribas
+etiquetas, encabezados ni marcadores de tu proceso interno — cosas como "(Silencio mental)", "Postura:",
+"Argumento:", "Referencia:" o "(Respuesta)" — ni siquiera para separar el razonamiento de la respuesta.
 
 Redacta ahora tu respuesta final (solo la respuesta, sin mencionar el paso ni la categoría):
     """

@@ -7,10 +7,15 @@ __pycache__/
 
 # Credenciales (nunca versionar)
 .env
+secrets/
 
 # Cache de audio generado por TTS
 backend/public/cache/*
 !backend/public/cache/.gitkeep
+
+# Logs locales del agente de voz
+agent/latency_log.jsonl
+agent/*.log
 
 # Editor / SO
 .vscode/
