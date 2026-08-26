@@ -41,6 +41,16 @@ html, body {
    ============================================================ */
 .hidden { display: none !important; }
 
+/* Foco visible por teclado, consistente en toda la app (no depende del
+   outline por defecto de cada navegador) */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+.chip-v:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+}
+
 /* ============================================================
    MODO CHAT — LAYOUT PRINCIPAL
    ============================================================ */
@@ -186,6 +196,11 @@ html, body {
     padding: 12px 24px;
     border-top: 1px solid var(--border);
     overflow-x: auto;
+    /* Desvanece los bordes izquierdo/derecho para insinuar que hay más chips
+       fuera de vista — se nota más en mobile, donde la fila casi siempre
+       excede el ancho de pantalla. */
+    -webkit-mask-image: linear-gradient(to right, transparent, black 20px, black calc(100% - 20px), transparent);
+    mask-image: linear-gradient(to right, transparent, black 20px, black calc(100% - 20px), transparent);
 }
 
 .suggestion-chips-row::-webkit-scrollbar { height: 3px; }
@@ -290,11 +305,41 @@ html, body {
 }
 
 .message.user-message { align-self: flex-end; }
-.message.assistant-message { align-self: flex-start; }
+.message.assistant-message {
+    align-self: flex-start;
+    flex-direction: column;
+    gap: 4px;
+}
 .message.system-msg {
     align-self: center;
     max-width: 85%;
 }
+
+/* Botón "copiar" bajo cada respuesta de Mario — sutil, aparece con más fuerza
+   al pasar el mouse o al enfocarlo con teclado. Siempre visible en touch
+   (no hay :hover confiable), pero discreto. */
+.copy-msg-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    align-self: flex-start;
+    background: none;
+    border: none;
+    padding: 2px 4px;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    opacity: 0.55;
+    transition: var(--transition);
+}
+
+.message.assistant-message:hover .copy-msg-btn,
+.copy-msg-btn:focus-visible {
+    opacity: 1;
+    color: var(--accent-green);
+}
+
+.copy-msg-btn.copied { color: var(--accent-green); opacity: 1; }
 
 .message-bubble {
     padding: 11px 16px;
@@ -330,6 +375,39 @@ html, body {
     padding: 6px 14px;
     border-radius: 20px;
     display: inline-block;
+}
+
+/* Tarjeta de bienvenida — reemplaza al pill de sistema genérico solo en el
+   primer mensaje, para que abrir el chat se sienta menos vacío. */
+.welcome-card {
+    align-self: center;
+    max-width: 380px;
+    text-align: center;
+    background: linear-gradient(180deg, var(--gold-light), transparent);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 22px 24px;
+    margin: 8px 0 4px;
+}
+
+.welcome-card i {
+    font-size: 1.3rem;
+    color: var(--gold);
+    margin-bottom: 8px;
+}
+
+.welcome-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.welcome-card p {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
 }
 
 /* Loading dots */
@@ -433,6 +511,14 @@ html, body {
 .input-send-btn:hover {
     background: #264129;
     transform: scale(1.05);
+}
+
+.input-send-btn:disabled {
+    background: var(--bg);
+    color: var(--text-muted);
+    box-shadow: none;
+    cursor: default;
+    transform: none;
 }
 
 .disclaimer {
@@ -716,6 +802,34 @@ html, body {
     height: 6px;
     border-radius: 50%;
     background: var(--gold);
+}
+
+/* Mismo formato que .modal-roadmap, pero con un check verde en vez del punto
+   dorado — distingue visualmente "ya hecho" (changelog) de "viene" (roadmap) */
+.modal-changelog {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.modal-changelog li {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    padding-left: 22px;
+    position: relative;
+    line-height: 1.5;
+}
+
+.modal-changelog li::before {
+    content: '\f00c'; /* fa-check */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+    top: 1px;
+    font-size: 0.7rem;
+    color: var(--accent-green);
 }
 
 .feedback-textarea {

@@ -47,7 +47,7 @@
                 </div>
             </div>
 
-            <div class="chat-messages" id="chatMessages">
+            <div class="chat-messages" id="chatMessages" role="log" aria-live="polite" aria-label="Conversación con Mario Vargas Llosa">
                 <div class="message system-msg">
                     <span>Biblioteca de Don Mario abierta. Escribe o habla para comenzar.</span>
                 </div>
@@ -62,10 +62,10 @@
 
             <div class="chat-input-area">
                 <input type="text" id="textInput" placeholder="Escríbele a Mario Vargas Llosa..." autocomplete="off">
-                <button class="input-mic-btn" id="micBtn" title="Dictar mensaje">
+                <button class="input-mic-btn" id="micBtn" title="Dictar mensaje" aria-label="Dictar mensaje">
                     <i class="fa-solid fa-microphone"></i>
                 </button>
-                <button class="input-send-btn" id="sendBtn" title="Enviar">
+                <button class="input-send-btn" id="sendBtn" title="Enviar" aria-label="Enviar mensaje" disabled>
                     <i class="fa-solid fa-arrow-up"></i>
                 </button>
             </div>
@@ -95,10 +95,10 @@
         <div class="call-status" id="callStatus">Conectando...</div>
 
         <div class="call-controls">
-            <button class="ctrl-btn ctrl-mute" id="muteBtn" title="Silenciar micrófono">
+            <button class="ctrl-btn ctrl-mute" id="muteBtn" title="Silenciar micrófono" aria-label="Silenciar micrófono">
                 <i class="fa-solid fa-microphone"></i>
             </button>
-            <button class="ctrl-btn ctrl-hangup" id="hangupBtn" title="Colgar">
+            <button class="ctrl-btn ctrl-hangup" id="hangupBtn" title="Colgar" aria-label="Colgar llamada">
                 <i class="fa-solid fa-phone-slash"></i>
             </button>
         </div>
@@ -109,7 +109,7 @@
     <!-- ===== VENTANA: SOBRE EL PROYECTO ===== -->
     <div class="modal-overlay hidden" id="infoModal">
         <div class="modal-card">
-            <button class="modal-close-btn" id="infoModalCloseBtn" title="Cerrar">
+            <button class="modal-close-btn" id="infoModalCloseBtn" title="Cerrar" aria-label="Cerrar ventana">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
@@ -122,12 +122,24 @@
                 iniciar una llamada de voz en tiempo real.
             </p>
 
+            <h3 class="modal-subtitle">Novedades</h3>
+            <ul class="modal-changelog">
+                <li>Llamada de voz en tiempo real notablemente más rápida y con menos demoras al responder</li>
+                <li>Corregido un error donde a veces se filtraba el razonamiento interno del modelo antes de la respuesta final</li>
+                <li>Saludo de bienvenida de Don Mario al conectar la llamada de voz</li>
+                <li>Botón para copiar cualquier respuesta de Mario</li>
+                <li>Mejoras de accesibilidad: navegación por teclado y compatibilidad con lectores de pantalla</li>
+                <li>Pulido visual general del chat</li>
+            </ul>
+
             <h3 class="modal-subtitle">Qué se viene</h3>
             <ul class="modal-roadmap">
                 <li>Memoria de conversación, para que Don Mario recuerde el hilo de la charla</li>
+                <li>Acceso a más modelos de IA, para respuestas aún más rápidas y estables</li>
+                <li>Manejo más inteligente de interrupciones durante la llamada de voz</li>
                 <li>Más referencias literarias verificadas y citas de su obra</li>
                 <li>Soporte para más idiomas</li>
-                <li>Mejoras de latencia en la llamada de voz en tiempo real</li>
+                <li>Modo oscuro y más personalización visual</li>
             </ul>
 
             <h3 class="modal-subtitle">Danos tu feedback</h3>

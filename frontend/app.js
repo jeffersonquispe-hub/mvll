@@ -35,6 +35,7 @@ let livekitUrl      = '';
 let isMuted         = false;
 let isRecording     = false;
 let speechRecognition = null;
+let callConnected   = false; // true una vez que la llamada está realmente en curso (no "conectando...")
 
 // ============================================================
 // INICIALIZACIÓN
@@ -53,6 +54,16 @@ function setupEventListeners() {
     sendBtn.addEventListener('click', sendMessage);
     textInput.addEventListener('keypress', e => {
         if (e.key === 'Enter') sendMessage();
+    });
+
+    // Botón de enviar reactivo: apagado mientras no haya nada que enviar
+    textInput.addEventListener('input', () => {
+        sendBtn.disabled = textInput.value.trim().length === 0;
+    });
+
+    // En mobile, el teclado virtual puede tapar el input recién enfocado
+    textInput.addEventListener('focus', () => {
+        setTimeout(() => textInput.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
     });
 
     // Chat: micrófono (ASR fallback)
@@ -138,9 +149,9 @@ async function checkBackendConfig() {
             livekitUrl = data.livekit_url || '';
             chatMessages.innerHTML = '';
             const msg = livekitUrl
-                ? 'Biblioteca abierta. Escribe o inicia una llamada de voz.'
-                : 'Biblioteca abierta. Escribe tu pregunta para comenzar.';
-            showSystemMessage(msg);
+                ? 'Escríbele o inicia una llamada de voz en tiempo real.'
+                : 'Escribe tu pregunta para comenzar a conversar.';
+            showWelcomeMessage(msg);
 
             // Mostrar/ocultar botón de llamada según disponibilidad de LiveKit
             startCallBtn.style.display = livekitUrl ? 'flex' : 'none';
@@ -166,6 +177,7 @@ function endCall() {
     callView.classList.add('hidden');
     chatView.classList.remove('hidden');
     setSpeaking(false);
+    callConnected = false;
     isMuted = false;
     muteBtn.classList.remove('muted');
     muteBtn.querySelector('i').className = 'fa-solid fa-microphone';
@@ -215,7 +227,8 @@ async function connectToLiveKit() {
 
         await livekitRoom.connect(livekitUrl, token);
         await livekitRoom.localParticipant.setMicrophoneEnabled(true);
-        setCallStatus('🎙️ En llamada — Habla libremente');
+        callConnected = true;
+        setCallStatus('Te escucho — habla libremente');
 
     } catch (e) {
         console.error('[LiveKit] Error:', e);
@@ -248,6 +261,11 @@ function setSpeaking(speaking) {
     if (avatarRingChat) avatarRingChat.classList.toggle('speaking', speaking);
     if (callAvatarRing) callAvatarRing.classList.toggle('speaking', speaking);
     if (callAvatarWrapper) callAvatarWrapper.classList.toggle('speaking', speaking);
+
+    // No pisar mensajes de "Conectando..." mientras se establece la llamada
+    if (callConnected) {
+        setCallStatus(speaking ? 'Mario está hablando...' : 'Te escucho — habla libremente');
+    }
 }
 
 // ============================================================
@@ -352,12 +370,13 @@ async function sendMessage() {
         }
 
         finishStream();
+        addCopyButton(botEl, bubble);
 
     } catch (e) {
         console.error('Error en streaming:', e);
         bubble.textContent = 'Disculpa, hubo un error al conectar con el servidor.';
     } finally {
-        sendBtn.disabled = false;
+        sendBtn.disabled = textInput.value.trim().length === 0;
     }
 }
 
@@ -420,6 +439,17 @@ function showUserMessage(text) {
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
+function showWelcomeMessage(subtext) {
+    const el = document.createElement('div');
+    el.className = 'welcome-card';
+    el.innerHTML = `
+        <i class="fa-solid fa-feather-pointed"></i>
+        <h3>Biblioteca de Don Mario</h3>
+        <p>${escapeHtml(subtext)}</p>
+    `;
+    chatMessages.appendChild(el);
+}
+
 function showSystemMessage(text) {
     const el = document.createElement('div');
     el.className = 'message system-msg';
@@ -435,6 +465,33 @@ function showBotLoadingMessage() {
     chatMessages.appendChild(el);
     chatMessages.scrollTop = chatMessages.scrollHeight;
     return el;
+}
+
+function addCopyButton(container, bubble) {
+    if (!navigator.clipboard) return; // requiere contexto seguro (https/localhost)
+
+    const btn = document.createElement('button');
+    btn.className = 'copy-msg-btn';
+    btn.type = 'button';
+    btn.title = 'Copiar esta respuesta';
+    btn.setAttribute('aria-label', 'Copiar esta respuesta');
+    btn.innerHTML = '<i class="fa-regular fa-copy"></i><span>Copiar</span>';
+
+    btn.addEventListener('click', async () => {
+        try {
+            await navigator.clipboard.writeText(bubble.textContent.trim());
+            btn.classList.add('copied');
+            btn.innerHTML = '<i class="fa-solid fa-check"></i><span>Copiado</span>';
+            setTimeout(() => {
+                btn.classList.remove('copied');
+                btn.innerHTML = '<i class="fa-regular fa-copy"></i><span>Copiar</span>';
+            }, 1600);
+        } catch (e) {
+            console.warn('No se pudo copiar:', e);
+        }
+    });
+
+    container.appendChild(btn);
 }
 
 function showAsrStatus(text) {
