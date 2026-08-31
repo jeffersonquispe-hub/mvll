@@ -232,8 +232,26 @@ async function connectToLiveKit() {
 
     } catch (e) {
         console.error('[LiveKit] Error:', e);
-        setCallStatus(`Error: ${e.message}`);
-        setTimeout(endCall, 2000);
+        setCallStatus(micErrorMessage(e));
+        setTimeout(endCall, 5000);
+    }
+}
+
+// Traduce los errores de captura de micrófono a algo entendible para el usuario
+function micErrorMessage(e) {
+    const name = e && e.name;
+    switch (name) {
+        case 'NotReadableError':
+        case 'AbortError':
+            return 'No se pudo acceder al micrófono. Cierra cualquier app que lo esté usando (Zoom, Discord, OBS, Teams…) y vuelve a intentarlo.';
+        case 'NotAllowedError':
+        case 'SecurityError':
+            return 'Permiso de micrófono denegado. Actívalo en el candado de la barra de direcciones y recarga la página.';
+        case 'NotFoundError':
+        case 'OverconstrainedError':
+            return 'No se detectó ningún micrófono. Conecta uno y comprueba el dispositivo de entrada en la configuración de sonido.';
+        default:
+            return `No se pudo iniciar la llamada de voz${name ? ` (${name})` : ''}.`;
     }
 }
 

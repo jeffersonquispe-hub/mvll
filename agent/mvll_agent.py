@@ -21,21 +21,23 @@ import asyncio
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Cargar .env de forma absoluta y configurar credenciales de Google
+# Cargar .env de forma absoluta si existe (desarrollo local). En un host como
+# Render no hay archivo .env — las variables llegan ya inyectadas en el entorno,
+# así que la configuración de abajo debe correr igual, exista o no el .env.
 env_path = Path(__file__).resolve().parent.parent / ".env"
 if env_path.exists():
     load_dotenv(dotenv_path=env_path)
-    # Configurar las variables del sistema para LiveKit y ElevenLabs
-    eleven_key = os.getenv("ELEVENLABS_API_KEY")
 
-    # GOOGLE_APPLICATION_CREDENTIALS sigue haciendo falta para el LLM (Gemini vía
-    # Vertex AI, fallback de Bedrock) — se autentica por ADC leyendo esa variable
-    # de entorno directamente, sin que el código la pase explícitamente. El STT ya
-    # no usa Google (ver abajo), así que no necesita su propia referencia a la ruta.
-
-    if eleven_key:
-        os.environ["ELEVEN_API_KEY"] = eleven_key
-        print(f"[Agent Setup] Configured ElevenLabs API Key")
+# Configurar las variables del sistema para LiveKit y ElevenLabs.
+# GOOGLE_APPLICATION_CREDENTIALS sigue haciendo falta para el LLM (Gemini vía
+# Vertex AI, fallback de Bedrock) — se autentica por ADC leyendo esa variable
+# de entorno directamente, sin que el código la pase explícitamente. El STT ya
+# no usa Google (ver abajo), así que no necesita su propia referencia a la ruta.
+eleven_key = os.getenv("ELEVENLABS_API_KEY") or os.getenv("ELEVEN_API_KEY")
+if eleven_key:
+    # El plugin de ElevenLabs de LiveKit lee ELEVEN_API_KEY, no ELEVENLABS_API_KEY.
+    os.environ["ELEVEN_API_KEY"] = eleven_key
+    print("[Agent Setup] Configured ElevenLabs API Key")
 
 from livekit.agents import (
     AgentSession,

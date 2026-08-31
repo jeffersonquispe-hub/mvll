@@ -1,0 +1,17 @@
+# Levanta el agente de voz en un contenedor Linux, conectado a LiveKit Cloud.
+# Uso:  cd agent  &&  docker compose up --build
+#
+# Lee el .env de la raíz del repo. La ruta de GOOGLE_APPLICATION_CREDENTIALS del
+# .env es una ruta Windows y no sirve dentro del contenedor: se sobreescribe aquí
+# a /secrets/credentials.json y se monta la carpeta secrets/ ahí.
+
+services:
+  mvll-agent:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - ../.env
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: /secrets/credentials.json
+    volumes:
+      - ../secrets:/secrets:ro
